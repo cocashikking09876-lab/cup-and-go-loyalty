@@ -23,7 +23,6 @@
             color: var(--text-color);
             padding-bottom: 70px;
         }
-        body.rtl { direction: rtl; }
         .hidden { display: none !important; }
         .login-container {
             display: flex;
@@ -107,6 +106,311 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+        }
+        .item-img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        .cart-section {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .cart-list {
+            list-style: none;
+            padding: 0;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .cart-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #333;
+        }
+        .modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen" class="login-container">
+        <div class="card">
+            <h2>☕ Coffee Shop Login</h2>
+            <input type="email" id="email" value="cocashikking09876@gmail.com">
+            <input type="password" id="password" placeholder="Password" value="123456">
+            <button type="button" onclick="handleLogin()">Login</button>
+        </div>
+    </div>
+
+    <!-- MAIN APP SCREEN -->
+    <div id="app-screen" class="hidden">
+        <div class="header">
+            <h3>Cup & Go</h3>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <button onclick="handleLogout()" class="btn-danger" style="width: auto; padding: 6px 12px; margin: 0;">Logout</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- MENU TAB -->
+            <div id="tab-menu" class="tab-content">
+                <div class="item-grid" id="menu-container"></div>
+                <div class="cart-section">
+                    <h3>Current Order</h3>
+                    <ul class="cart-list" id="cart-items"></ul>
+                    <h4>Total: SR <span id="total-price">0</span></h4>
+                    <button onclick="completeSale()" style="background: var(--success-color); color: #fff;">Complete Order</button>
+                </div>
+            </div>
+
+            <!-- SALES TAB -->
+            <div id="tab-sales" class="tab-content hidden">
+                <div class="card" style="max-width: 100%;">
+                    <h3>Today Sales</h3>
+                    <p>Total: SR <span id="stat-total-money">0</span></p>
+                    <p>Items Sold: <span id="stat-total-items">0</span></p>
+                    <button onclick="downloadPdf()">📄 Export Sales PDF</button>
+                    <h4 style="margin-top:20px;">Recent Orders</h4>
+                    <ul id="sales-history-list" style="list-style:none; padding:0;"></ul>
+                </div>
+            </div>
+
+            <!-- SETTINGS TAB -->
+            <div id="tab-settings" class="tab-content hidden">
+                <div class="card" style="max-width: 100%; margin-bottom: 15px;">
+                    <h4>Add New Item</h4>
+                    <input type="text" id="new-item-name" placeholder="Item Name">
+                    <input type="number" id="new-item-price" placeholder="Price">
+                    <input type="text" id="new-item-img" placeholder="Image URL">
+                    <button onclick="addNewItem()">+ Add Item</button>
+                </div>
+
+                <div class="card" style="max-width: 100%;">
+                    <h4>Manage Items</h4>
+                    <div id="settings-item-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <button class="nav-btn active" onclick="switchTab('menu')">
+                <span>☕</span>
+                <span>Menu</span>
+            </button>
+            <button class="nav-btn" onclick="openPinModal('sales')">
+                <span>📊</span>
+                <span>Sales</span>
+            </button>
+            <button class="nav-btn" onclick="openPinModal('settings')">
+                <span>⚙️</span>
+                <span>Settings</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- PIN SECURITY MODAL -->
+    <div id="pin-modal" class="modal hidden">
+        <div class="card" style="text-align: center;">
+            <h3>Admin Security</h3>
+            <p>Enter 4-Digit Admin PIN (1234)</p>
+            <input type="password" id="modal-pin-input" maxlength="4" style="text-align: center; font-size: 24px; letter-spacing: 5px;" value="1234">
+            <div style="display:flex; gap: 10px;">
+                <button class="btn-danger" onclick="closePinModal()">Cancel</button>
+                <button onclick="submitPin()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PIN = "1234";
+        let targetTabAfterPin = '';
+        let cart = [];
+        let total = 0;
+
+        let menuItems = JSON.parse(localStorage.getItem('pos_items')) || [
+            { id: '1', name: 'Espresso', price: 10, img: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=200' },
+            { id: '2', name: 'Cappuccino', price: 14, img: 'https://images.unsplash.com/photo-1534778101976-62847782c213?w=200' },
+            { id: '3', name: 'Latte', price: 15, img: 'https://images.unsplash.com/photo-1570968915860-54d5c301fa9f?w=200' }
+        ];
+
+        let salesData = JSON.parse(localStorage.getItem('pos_sales')) || [];
+
+        function handleLogin() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('app-screen').classList.remove('hidden');
+            loadMenuItems();
+        }
+
+        function handleLogout() {
+            document.getElementById('app-screen').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        function openPinModal(tabName) {
+            targetTabAfterPin = tabName;
+            document.getElementById('pin-modal').classList.remove('hidden');
+        }
+
+        function closePinModal() {
+            document.getElementById('pin-modal').classList.add('hidden');
+        }
+
+        function submitPin() {
+            const pin = document.getElementById('modal-pin-input').value;
+            if(pin === ADMIN_PIN) {
+                closePinModal();
+                switchTab(targetTabAfterPin);
+            } else {
+                alert("Incorrect PIN! (Use 1234)");
+            }
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            
+            if(tabName === 'menu') {
+                document.getElementById('tab-menu').classList.remove('hidden');
+                document.querySelectorAll('.nav-btn')[0].classList.add('active');
+            } else if(tabName === 'sales') {
+                document.getElementById('tab-sales').classList.remove('hidden');
+                document.querySelectorAll('.nav-btn')[1].classList.add('active');
+                loadSalesReport();
+            } else if(tabName === 'settings') {
+                document.getElementById('tab-settings').classList.remove('hidden');
+                document.querySelectorAll('.nav-btn')[2].classList.add('active');
+                loadSettingsItemList();
+            }
+        }
+
+        function loadMenuItems() {
+            const container = document.getElementById('menu-container');
+            container.innerHTML = '';
+            menuItems.forEach(item => {
+                container.innerHTML += `
+                    <div class="item-card">
+                        <div>
+                            <img src="${item.img || 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=200'}" class="item-img">
+                            <h4 style="margin:5px 0;">${item.name}</h4>
+                            <p style="margin:0; color:#d4af37;">SR ${item.price}</p>
+                        </div>
+                        <button onclick="addToCart('${item.name}', ${item.price})">+ Add</button>
+                    </div>
+                `;
+            });
+        }
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            total += price;
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartList = document.getElementById('cart-items');
+            cartList.innerHTML = '';
+            cart.forEach(item => {
+                cartList.innerHTML += `<li><span>${item.name}</span> <span>SR ${item.price}</span></li>`;
+            });
+            document.getElementById('total-price').textContent = total;
+        }
+
+        function completeSale() {
+            if (cart.length === 0) return alert("Cart is empty!");
+            const sale = {
+                items: [...cart],
+                totalAmount: total,
+                itemCount: cart.length,
+                date: new Date().toLocaleTimeString()
+            };
+            salesData.push(sale);
+            localStorage.setItem('pos_sales', JSON.stringify(salesData));
+            alert("Sale completed successfully!");
+            cart = [];
+            total = 0;
+            updateCartUI();
+        }
+
+        function loadSalesReport() {
+            let grandTotalMoney = 0;
+            let grandTotalItems = 0;
+            const historyList = document.getElementById('sales-history-list');
+            historyList.innerHTML = '';
+
+            salesData.forEach(data => {
+                grandTotalMoney += data.totalAmount || 0;
+                grandTotalItems += data.itemCount || 0;
+                const itemsText = data.items ? data.items.map(i => i.name).join(', ') : 'Coffee';
+                historyList.innerHTML += `
+                    <li style="padding:8px 0; border-bottom:1px solid #333; display:flex; justify-content:space-between;">
+                        <span>${itemsText}</span>
+                        <span style="color:#d4af37; font-weight:bold;">SR ${data.totalAmount}</span>
+                    </li>
+                `;
+            });
+
+            document.getElementById('stat-total-money').textContent = grandTotalMoney;
+            document.getElementById('stat-total-items').textContent = grandTotalItems;
+        }
+
+        function downloadPdf() {
+            const element = document.createElement('div');
+            element.innerHTML = `<h2>Cup & Go Sales Report</h2><p>Total Revenue: SR ${document.getElementById('stat-total-money').textContent}</p>`;
+            html2pdf().from(element).save('Sales_Report.pdf');
+        }
+
+        function addNewItem() {
+            const name = document.getElementById('new-item-name').value;
+            const price = parseInt(document.getElementById('new-item-price').value);
+            const img = document.getElementById('new-item-img').value;
+
+            if(!name || !price) return alert("Please enter valid item name and price!");
+
+            menuItems.push({ id: Date.now().toString(), name, price, img });
+            localStorage.setItem('pos_items', JSON.stringify(menuItems));
+            alert("New item added!");
+            document.getElementById('new-item-name').value = '';
+            document.getElementById('new-item-price').value = '';
+            document.getElementById('new-item-img').value = '';
+            loadSettingsItemList();
+        }
+
+        function loadSettingsItemList() {
+            const listContainer = document.getElementById('settings-item-list');
+            listContainer.innerHTML = '';
+            menuItems.forEach(item => {
+                listContainer.innerHTML += `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #333;">
+                        <span>${item.name} - SR ${item.price}</span>
+                        <button class="btn-danger" style="padding:4px 8px; font-size:12px; width:auto;" onclick="deleteMenuItem('${item.id}')">Delete</button>
+                    </div>
+                `;
+            });
+        }
+
+        function deleteMenuItem(id) {
+            if(confirm("Are you sure?")) {
+                menuItems = menuItems.filter(item => item.id !== id);
+                localStorage.setItem('pos_items', JSON.stringify(menuItems));
+                loadSettingsItemList();
+            }
+        }
+    </script>
+</body>
+</html>
         }
         .item-img {
             width: 100%;
