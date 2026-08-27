@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cup And Go - Sign In</title>
+    <title>Cup And Go - Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
@@ -22,7 +22,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            padding-bottom: 70px;
+            padding-bottom: 80px;
         }
         .hidden { display: none !important; }
 
@@ -106,12 +106,6 @@
             font-size: 14px;
             outline: none;
         }
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover, 
-        input:-webkit-autofill:focus {
-            -webkit-box-shadow: 0 0 0 30px #fafafa inset !important;
-            -webkit-text-fill-color: #1a1a1a !important;
-        }
         .input-field-wrapper input:focus {
             border-color: var(--primary-orange);
             background: #fff !important;
@@ -151,95 +145,326 @@
             margin-top: 20px;
         }
 
-        /* MAIN APP STYLES */
-        .header {
+        /* NEW DASHBOARD UI */
+        .dash-header {
+            background: linear-gradient(180deg, #ff7a00 0%, #ff9533 100%);
+            padding: 20px 15px 25px 15px;
+            color: #fff;
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+        }
+        .dash-top-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px;
-            background: #1e1e1e;
-            color: #fff;
-            border-bottom: 1px solid #333;
+            margin-bottom: 20px;
         }
+        .brand-badge {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .brand-icon-box {
+            width: 45px; height: 45px;
+            background: #fff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .greeting-text {
+            font-size: 12px;
+            color: #ffe6d5;
+            margin: 0;
+        }
+        .brand-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .notification-btn {
+            width: 42px; height: 42px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        /* TOP STATS CARDS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(5px);
+            border-radius: 14px;
+            padding: 12px 5px;
+            text-align: center;
+        }
+        .stat-card .num {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        .stat-card .label {
+            font-size: 10px;
+            color: #fceade;
+        }
+
+        /* MAIN BODY CONTENT */
+        .dashboard-body {
+            padding: 15px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 15px 0 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 16px;
+            background: var(--primary-orange);
+            border-radius: 2px;
+        }
+
+        /* QUICK ACTIONS */
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .quick-action-item {
+            background: #fff;
+            border-radius: 16px;
+            padding: 12px 6px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            cursor: pointer;
+            border: 1px solid #eee;
+        }
+        .qa-icon {
+            width: 40px; height: 40px;
+            margin: 0 auto 8px auto;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .qa-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* LOYALTY CARDS SECTION */
+        .loyalty-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .new-btn {
+            background: var(--primary-orange);
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 18px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(255,122,0,0.3);
+        }
+        .loyalty-card-box {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            margin-top: 10px;
+            border: 1px solid #eaeaea;
+        }
+        .lc-top-banner {
+            background: #3b2a2a;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+        }
+        .lc-brand-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .lc-logo {
+            width: 35px; height: 35px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        .lc-details-body {
+            padding: 15px;
+        }
+        .lc-status-badge {
+            background: #fff2e6;
+            color: var(--primary-orange);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+        .lc-stats-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 12px 0;
+            padding: 8px 0;
+            border-top: 1px solid #f0f0f0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 12px;
+            color: #666;
+        }
+        .lc-actions-row {
+            display: flex;
+            gap: 8px;
+        }
+        .lc-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid #e1e1e1;
+            background: #f8f9fa;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            color: #333;
+        }
+        .lc-btn.primary {
+            background: #fff2e6;
+            color: var(--primary-orange);
+            border-color: #ffd6b3;
+        }
+
+        /* BOTTOM NAV BAR */
         .bottom-nav {
             position: fixed;
             bottom: 0; left: 0; right: 0;
-            height: 60px;
-            background: #1e1e1e;
+            height: 65px;
+            background: #ffffff;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            border-top: 1px solid #333;
+            border-top: 1px solid #eee;
             z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.03);
         }
         .nav-btn {
             background: none;
-            color: #aaa;
+            color: #888;
             border: none;
-            font-size: 14px;
+            font-size: 11px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            gap: 3px;
             padding: 0; width: auto; margin: 0;
             cursor: pointer;
         }
-        .nav-btn.active { color: var(--accent-color); }
-        .main-content { padding: 15px; background: #121212; min-height: calc(100vh - 120px); color: #fff;}
+        .nav-btn .icon { font-size: 18px; }
+        .nav-btn.active { color: var(--primary-orange); font-weight: 600; }
+        .nav-btn.center-qr {
+            position: relative;
+            top: -15px;
+        }
+        .center-qr-icon {
+            width: 50px; height: 50px;
+            background: linear-gradient(135deg, #ff7a00 0%, #ffa54f 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 22px;
+            box-shadow: 0 4px 12px rgba(255,122,0,0.4);
+            border: 3px solid #fff;
+        }
+
+        /* OTHER APP SCREENS */
+        .tab-content { padding: 15px; }
+        .card-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+        }
+        .app-input {
+            width: 100%;
+            padding: 11px 14px;
+            margin: 8px 0;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            background: #fafafa;
+            color: #333;
+            font-size: 14px;
+            outline: none;
+        }
+        .app-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary-orange);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .btn-danger { background: var(--danger-color); color: #fff; }
+        .modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
         .item-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 12px;
         }
         .item-card {
-            background: #1e1e1e;
-            border-radius: 8px;
+            background: #fff;
+            border-radius: 12px;
             padding: 10px;
+            border: 1px solid #eee;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
         .item-img {
             width: 100%;
-            height: 100px;
+            height: 90px;
             object-fit: cover;
-            border-radius: 6px;
-        }
-        .card-box {
-            background: #1e1e1e;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        .app-input {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 6px;
-            border: 1px solid #333;
-            background: #2a2a2a;
-            color: #fff;
-        }
-        .app-btn {
-            width: 100%;
-            padding: 10px;
-            background: var(--accent-color);
-            border: none;
-            border-radius: 6px;
-            color: #000;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .btn-danger { background: var(--danger-color); color: #fff; }
-        .modal {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 200;
+            border-radius: 8px;
         }
     </style>
 </head>
@@ -254,7 +479,7 @@
         <div class="login-card">
             <div class="login-title-row">
                 <h2>Sign in</h2>
-                <button type="button" class="create-acc-btn" onclick="alert('Admin Mode Active')">Create account</button>
+                <button type="button" class="create-acc-btn" id="create-acc-btn">Create account</button>
             </div>
             
             <div class="input-group">
@@ -274,10 +499,10 @@
             </div>
 
             <div class="forgot-pass">
-                <a href="#" onclick="alert('Just click Log in to enter!')">Forgot your password?</a>
+                <a href="#" id="forgot-pass-link">Forgot your password?</a>
             </div>
 
-            <button type="button" class="login-submit-btn" onclick="handleLogin()">Log in</button>
+            <button type="button" class="login-submit-btn" id="login-btn">Log in</button>
 
             <div class="login-footer-text">
                 By continuing you agree to the Terms & Conditions and Privacy Policy
@@ -287,238 +512,101 @@
 
     <!-- MAIN APP SCREEN -->
     <div id="app-screen" class="hidden">
-        <div class="header">
-            <h3>Cup & Go POS</h3>
-            <button type="button" onclick="handleLogout()" class="btn-danger" style="width: auto; padding: 6px 12px; margin: 0;">Logout</button>
-        </div>
-
-        <div class="main-content">
-            <!-- MENU TAB -->
-            <div id="tab-menu" class="tab-content">
-                <div class="item-grid" id="menu-container"></div>
-                <div class="card-box" style="margin-top: 20px;">
-                    <h3>Current Order</h3>
-                    <ul id="cart-items" style="list-style: none; padding: 0; max-height: 120px; overflow-y: auto;"></ul>
-                    <h4>Total: SR <span id="total-price">0</span></h4>
-                    <button type="button" class="app-btn" onclick="completeSale()" style="background: var(--success-color); color: #fff;">Complete Order</button>
-                </div>
-            </div>
-
-            <!-- SALES TAB -->
-            <div id="tab-sales" class="tab-content hidden">
-                <div class="card-box">
-                    <h3>Today Sales</h3>
-                    <p>Total Revenue: SR <span id="stat-total-money">0</span></p>
-                    <p>Items Sold: <span id="stat-total-items">0</span></p>
-                    <button type="button" class="app-btn" onclick="downloadPdf()">📄 Export Sales PDF</button>
-                    <h4 style="margin-top:15px;">Recent Orders</h4>
-                    <ul id="sales-history-list" style="list-style:none; padding:0;"></ul>
-                </div>
-            </div>
-
-            <!-- SETTINGS TAB -->
-            <div id="tab-settings" class="tab-content hidden">
-                <div class="card-box">
-                    <h4>Add New Item</h4>
-                    <input type="text" id="new-item-name" class="app-input" placeholder="Item Name">
-                    <input type="number" id="new-item-price" class="app-input" placeholder="Price">
-                    <input type="text" id="new-item-img" class="app-input" placeholder="Image URL">
-                    <button type="button" class="app-btn" onclick="addNewItem()">+ Add Item</button>
-                </div>
-                <div class="card-box">
-                    <h4>Manage Items</h4>
-                    <div id="settings-item-list"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- BOTTOM NAVIGATION -->
-        <div class="bottom-nav">
-            <button type="button" class="nav-btn active" onclick="switchTab('menu')">
-                <span>☕</span>
-                <span>Menu</span>
-            </button>
-            <button type="button" class="nav-btn" onclick="openPinModal('sales')">
-                <span>📊</span>
-                <span>Sales</span>
-            </button>
-            <button type="button" class="nav-btn" onclick="openPinModal('settings')">
-                <span>⚙️</span>
-                <span>Settings</span>
-            </button>
-        </div>
-    </div>
-
-    <!-- PIN SECURITY MODAL -->
-    <div id="pin-modal" class="modal hidden">
-        <div class="card-box" style="width: 90%; max-width: 350px; text-align: center;">
-            <h3>Admin Security</h3>
-            <p style="color:#aaa; font-size:13px;">Enter 4-Digit Admin PIN (1234)</p>
-            <input type="password" id="modal-pin-input" class="app-input" maxlength="4" style="text-align: center; font-size: 22px; letter-spacing: 5px;" value="1234">
-            <div style="display:flex; gap: 10px; margin-top: 15px;">
-                <button type="button" class="app-btn btn-danger" onclick="closePinModal()" style="margin-top:0;">Cancel</button>
-                <button type="button" class="app-btn" onclick="submitPin()" style="margin-top:0;">Confirm</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        const ADMIN_PIN = "1234";
-        let targetTabAfterPin = '';
-        let cart = [];
-        let total = 0;
-
-        let menuItems = JSON.parse(localStorage.getItem('pos_items')) || [
-            { id: '1', name: 'Espresso', price: 10, img: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=200' },
-            { id: '2', name: 'Cappuccino', price: 14, img: 'https://images.unsplash.com/photo-1534778101976-62847782c213?w=200' },
-            { id: '3', name: 'Latte', price: 15, img: 'https://images.unsplash.com/photo-1570968915860-54d5c301fa9f?w=200' }
-        ];
-
-        let salesData = JSON.parse(localStorage.getItem('pos_sales')) || [];
-
-        function handleLogin() {
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('app-screen').classList.remove('hidden');
-            loadMenuItems();
-        }
-
-        function handleLogout() {
-            document.getElementById('app-screen').classList.add('hidden');
-            document.getElementById('login-screen').classList.remove('hidden');
-        }
-
-        function openPinModal(tabName) {
-            targetTabAfterPin = tabName;
-            document.getElementById('pin-modal').classList.remove('hidden');
-        }
-
-        function closePinModal() {
-            document.getElementById('pin-modal').classList.add('hidden');
-        }
-
-        function submitPin() {
-            const pin = document.getElementById('modal-pin-input').value;
-            if(pin === ADMIN_PIN) {
-                closePinModal();
-                switchTab(targetTabAfterPin);
-            } else {
-                alert("Incorrect PIN! (Use 1234)");
-            }
-        }
-
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-            
-            if(tabName === 'menu') {
-                document.getElementById('tab-menu').classList.remove('hidden');
-                document.querySelectorAll('.nav-btn')[0].classList.add('active');
-            } else if(tabName === 'sales') {
-                document.getElementById('tab-sales').classList.remove('hidden');
-                document.querySelectorAll('.nav-btn')[1].classList.add('active');
-                loadSalesReport();
-            } else if(tabName === 'settings') {
-                document.getElementById('tab-settings').classList.remove('hidden');
-                document.querySelectorAll('.nav-btn')[2].classList.add('active');
-                loadSettingsItemList();
-            }
-        }
-
-        function loadMenuItems() {
-            const container = document.getElementById('menu-container');
-            container.innerHTML = '';
-            menuItems.forEach(item => {
-                container.innerHTML += `
-                    <div class="item-card">
-                        <div>
-                            <img src="${item.img || 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=200'}" class="item-img">
-                            <h4 style="margin:5px 0;">${item.name}</h4>
-                            <p style="margin:0; color:#d4af37;">SR ${item.price}</p>
-                        </div>
-                        <button type="button" class="app-btn" onclick="addToCart('${item.name}', ${item.price})" style="padding: 6px; font-size:12px;">+ Add</button>
+        
+        <!-- HEADER -->
+        <div class="dash-header">
+            <div class="dash-top-row">
+                <div class="brand-badge">
+                    <div class="brand-icon-box">🏷️</div>
+                    <div>
+                        <p class="greeting-text">Good morning ☀️</p>
+                        <h2 class="brand-title">Cup And Go</h2>
                     </div>
-                `;
-            });
-        }
+                </div>
+                <button type="button" class="notification-btn" id="notif-btn">🔔</button>
+            </div>
 
-        function addToCart(name, price) {
-            cart.push({ name, price });
-            total += price;
-            updateCartUI();
-        }
+            <!-- STATS CARDS -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="num">5</div>
+                    <div class="label">Customer</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num">36</div>
+                    <div class="label">Point</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num">3</div>
+                    <div class="label">Active</div>
+                </div>
+                <div class="stat-card">
+                    <div class="num">+5</div>
+                    <div class="label">New</div>
+                </div>
+            </div>
+        </div>
 
-        function updateCartUI() {
-            const cartList = document.getElementById('cart-items');
-            cartList.innerHTML = '';
-            cart.forEach(item => {
-                cartList.innerHTML += `<li style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #333; font-size:13px;"><span>${item.name}</span> <span>SR ${item.price}</span></li>`;
-            });
-            document.getElementById('total-price').textContent = total;
-        }
+        <div class="dashboard-body">
+            
+            <!-- HOME TAB -->
+            <div id="tab-home" class="tab-content">
+                <div class="section-title">Quick actions</div>
+                <div class="quick-actions-grid">
+                    <div class="quick-action-item" data-tab="menu">
+                        <div class="qa-icon" style="background: #fff2e6; color: #ff7a00;">📷</div>
+                        <div class="qa-title">Menu / POS</div>
+                    </div>
+                    <div class="quick-action-item" id="qa-notice">
+                        <div class="qa-icon" style="background: #f0edff; color: #7357ff;">📤</div>
+                        <div class="qa-title">Send notice</div>
+                    </div>
+                    <div class="quick-action-item" data-pin-tab="customers">
+                        <div class="qa-icon" style="background: #e8f8ec; color: #2eaf48;">👥</div>
+                        <div class="qa-title">Customers</div>
+                    </div>
+                    <div class="quick-action-item" data-pin-tab="analytics">
+                        <div class="qa-icon" style="background: #fff8e6; color: #f5a623;">📊</div>
+                        <div class="qa-title">Analytics</div>
+                    </div>
+                </div>
 
-        function completeSale() {
-            if (cart.length === 0) return alert("Cart is empty!");
-            const sale = {
-                items: [...cart],
-                totalAmount: total,
-                itemCount: cart.length,
-                date: new Date().toLocaleTimeString()
-            };
-            salesData.push(sale);
-            localStorage.setItem('pos_sales', JSON.stringify(salesData));
-            alert("Sale completed successfully!");
-            cart = [];
-            total = 0;
-            updateCartUI();
-        }
+                <div class="loyalty-header-row" style="margin-top: 20px;">
+                    <div class="section-title" style="margin: 0;">Loyalty cards</div>
+                    <button type="button" class="new-btn" data-tab="settings">+ New</button>
+                </div>
 
-        function loadSalesReport() {
-            let grandTotalMoney = 0;
-            let grandTotalItems = 0;
-            const historyList = document.getElementById('sales-history-list');
-            historyList.innerHTML = '';
+                <!-- LOYALTY CARD ITEM -->
+                <div class="loyalty-card-box">
+                    <div class="lc-top-banner">
+                        <div class="lc-brand-info">
+                            <img src="https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=100" class="lc-logo">
+                            <div>
+                                <div style="font-weight: bold; font-size: 14px;">Cup And Go</div>
+                                <div style="font-size: 11px; color: #ddd;">Cup And Go</div>
+                            </div>
+                        </div>
+                        <span style="font-size: 16px;">›</span>
+                    </div>
+                    <div class="lc-details-body">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <strong style="font-size: 15px;">Cup And Go</strong>
+                            <span class="lc-status-badge">● Active</span>
+                        </div>
+                        <div class="lc-stats-row">
+                            <div>👥 <strong>4</strong> Customer</div>
+                            <div>💰 <strong>0</strong> Point/riyal</div>
+                            <div>🎁 <strong>1</strong> Reward</div>
+                        </div>
+                        <div class="lc-actions-row">
+                            <button type="button" class="lc-btn primary" data-tab="menu">📝 Details</button>
+                            <button type="button" class="lc-btn" data-pin-tab="analytics">💳 Wallet</button>
+                            <button type="button" class="lc-btn" data-pin-tab="settings">✏️ Design</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            salesData.forEach(data => {
-                grandTotalMoney += data.totalAmount || 0;
-                grandTotalItems += data.itemCount || 0;
-                const itemsText = data.items ? data.items.map(i => i.name).join(', ') : 'Coffee';
-                historyList.innerHTML += `
-                    <li style="padding:6px 0; border-bottom:1px solid #333; display:flex; justify-content:space-between; font-size:13px;">
-                        <span>${itemsText}</span>
-                        <span style="color:#d4af37; font-weight:bold;">SR ${data.totalAmount}</span>
-                    </li>
-                `;
-            });
-
-            document.getElementById('stat-total-money').textContent = grandTotalMoney;
-            document.getElementById('stat-total-items').textContent = grandTotalItems;
-        }
-
-        function downloadPdf() {
-            const element = document.createElement('div');
-            element.innerHTML = `<h2>Cup & Go Sales Report</h2><p>Total Revenue: SR ${document.getElementById('stat-total-money').textContent}</p>`;
-            html2pdf().from(element).save('Sales_Report.pdf');
-        }
-
-        function addNewItem() {
-            const name = document.getElementById('new-item-name').value;
-            const price = parseInt(document.getElementById('new-item-price').value);
-            const img = document.getElementById('new-item-img').value;
-
-            if(!name || !price) return alert("Please enter valid item name and price!");
-
-            menuItems.push({ id: Date.now().toString(), name, price, img });
-            localStorage.setItem('pos_items', JSON.stringify(menuItems));
-            alert("New item added!");
-            document.getElementById('new-item-name').value = '';
-            document.getElementById('new-item-price').value = '';
-            document.getElementById('new-item-img').value = '';
-            loadSettingsItemList();
-        }
-
-        function loadSettingsItemList() {
-            const listContainer = document.getElementById('settings-item-list');
-            listContainer.innerHTML = '';
-            menuItems.forEach(item => {
-                listContainer.innerHTML += `
-                    <div style="display:f
+            <!-- ANALYTICS TAB -->
+            <div id="tab-analytics" class="tab-content hidden">
+                <div class="card-box
