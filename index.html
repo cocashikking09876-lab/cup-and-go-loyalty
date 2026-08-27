@@ -3,78 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cup & Go POS</title>
+    <title>Cup And Go - Sign In</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
+            --primary-orange: #ff7a00;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #1a1a1a;
+            --text-secondary: #777777;
             --accent-color: #d4af37;
-            --text-color: #ffffff;
-            --text-secondary: #aaa;
-            --danger-color: #ff5252;
             --success-color: #4caf50;
+            --danger-color: #ff5252;
         }
         * { box-sizing: border-box; }
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
+            color: var(--text-main);
             padding-bottom: 70px;
         }
         .hidden { display: none !important; }
-        .login-container {
+
+        /* LOGIN SCREEN STYLES */
+        .login-wrapper {
+            background-color: var(--primary-orange);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            padding: 20px;
+            justify-content: flex-end;
         }
-        .card {
-            background: var(--card-bg);
-            padding: 24px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            margin-bottom: 15px;
-        }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 6px;
-            border: 1px solid #333;
-            background: #2a2a2a;
+        .login-top-header {
+            text-align: center;
+            padding: 40px 20px;
             color: #fff;
         }
-        button {
+        .login-logo-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        .login-brand-name {
+            font-family: 'Brush Script MT', cursive, sans-serif;
+            font-size: 38px;
+            font-style: italic;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        .login-card {
+            background: var(--card-bg);
+            border-top-left-radius: 30px;
+            border-top-right-radius: 30px;
+            padding: 30px 25px;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.1);
             width: 100%;
-            padding: 12px;
-            background: var(--accent-color);
+        }
+        .login-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        .login-title-row h2 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: bold;
+        }
+        .create-acc-btn {
+            background: #fff2e6;
+            color: var(--primary-orange);
             border: none;
-            border-radius: 6px;
-            color: #000;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            width: auto;
+            margin: 0;
+        }
+        .input-group {
+            margin-bottom: 18px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-main);
+        }
+        .input-field-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-field-wrapper input {
+            width: 100%;
+            padding: 12px 15px 12px 40px;
+            border-radius: 12px;
+            border: 1px solid #e1e1e1;
+            background: #fafafa;
+            font-size: 14px;
+            outline: none;
+        }
+        .input-field-wrapper input:focus {
+            border-color: var(--primary-orange);
+            background: #fff;
+        }
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            color: var(--text-secondary);
+            font-size: 16px;
+        }
+        .forgot-pass {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .forgot-pass a {
+            color: var(--primary-orange);
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .login-submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary-orange);
+            border: none;
+            border-radius: 14px;
+            color: #fff;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(255,122,0,0.3);
         }
-        .btn-danger { background: var(--danger-color); color: #fff; }
+        .login-footer-text {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 20px;
+        }
+
+        /* MAIN APP STYLES */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px;
-            background: var(--card-bg);
+            background: #1e1e1e;
+            color: #fff;
             border-bottom: 1px solid #333;
         }
         .bottom-nav {
             position: fixed;
             bottom: 0; left: 0; right: 0;
             height: 60px;
-            background: var(--card-bg);
+            background: #1e1e1e;
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -83,7 +167,7 @@
         }
         .nav-btn {
             background: none;
-            color: var(--text-secondary);
+            color: #aaa;
             border: none;
             font-size: 14px;
             display: flex;
@@ -93,14 +177,14 @@
             cursor: pointer;
         }
         .nav-btn.active { color: var(--accent-color); }
-        .main-content { padding: 15px; }
+        .main-content { padding: 15px; background: #121212; min-height: calc(100vh - 120px); color: #fff;}
         .item-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
             gap: 12px;
         }
         .item-card {
-            background: var(--card-bg);
+            background: #1e1e1e;
             border-radius: 8px;
             padding: 10px;
             display: flex;
@@ -113,24 +197,34 @@
             object-fit: cover;
             border-radius: 6px;
         }
-        .cart-section {
-            background: var(--card-bg);
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 20px;
+        .card-box {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
-        .cart-list {
-            list-style: none;
-            padding: 0;
-            max-height: 150px;
-            overflow-y: auto;
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: 1px solid #333;
+            background: #2a2a2a;
+            color: #fff;
         }
-        .cart-list li {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            border-bottom: 1px solid #333;
+        .app-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 6px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
         }
+        .btn-danger { background: var(--danger-color); color: #fff; }
         .modal {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -145,59 +239,86 @@
 <body>
 
     <!-- LOGIN SCREEN -->
-    <div id="login-screen" class="login-container">
-        <div class="card">
-            <h2>☕ Coffee Shop Login</h2>
-            <input type="email" id="email" value="cocashikking09876@gmail.com">
-            <input type="password" id="password" placeholder="Password" value="123456">
-            <button type="button" onclick="handleLogin()">Login</button>
+    <div id="login-screen" class="login-wrapper">
+        <div class="login-top-header">
+            <div class="login-logo-icon">☕</div>
+            <h1 class="login-brand-name">Cup and go</h1>
+        </div>
+        <div class="login-card">
+            <div class="login-title-row">
+                <h2>Sign in</h2>
+                <button class="create-acc-btn" onclick="alert('Admin Mode Active')">Create account</button>
+            </div>
+            
+            <div class="input-group">
+                <label>Email</label>
+                <div class="input-field-wrapper">
+                    <span class="input-icon">✉️</span>
+                    <input type="email" id="email" value="cocashikking09876@gmail.com">
+                </div>
+            </div>
+
+            <div class="input-group" style="margin-bottom: 10px;">
+                <label>Password</label>
+                <div class="input-field-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="password" value="123456" placeholder="••••••••">
+                </div>
+            </div>
+
+            <div class="forgot-pass">
+                <a href="#" onclick="alert('Default password is 123456')">Forgot your password?</a>
+            </div>
+
+            <button class="login-submit-btn" onclick="handleLogin()">Log in</button>
+
+            <div class="login-footer-text">
+                By continuing you agree to the Terms & Conditions and Privacy Policy
+            </div>
         </div>
     </div>
 
     <!-- MAIN APP SCREEN -->
     <div id="app-screen" class="hidden">
         <div class="header">
-            <h3>Cup & Go</h3>
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <button onclick="handleLogout()" class="btn-danger" style="width: auto; padding: 6px 12px; margin: 0;">Logout</button>
-            </div>
+            <h3>Cup & Go POS</h3>
+            <button onclick="handleLogout()" class="btn-danger" style="width: auto; padding: 6px 12px; margin: 0;">Logout</button>
         </div>
 
         <div class="main-content">
             <!-- MENU TAB -->
             <div id="tab-menu" class="tab-content">
                 <div class="item-grid" id="menu-container"></div>
-                <div class="cart-section">
+                <div class="card-box" style="margin-top: 20px;">
                     <h3>Current Order</h3>
-                    <ul class="cart-list" id="cart-items"></ul>
+                    <ul id="cart-items" style="list-style: none; padding: 0; max-height: 120px; overflow-y: auto;"></ul>
                     <h4>Total: SR <span id="total-price">0</span></h4>
-                    <button onclick="completeSale()" style="background: var(--success-color); color: #fff;">Complete Order</button>
+                    <button class="app-btn" onclick="completeSale()" style="background: var(--success-color); color: #fff;">Complete Order</button>
                 </div>
             </div>
 
             <!-- SALES TAB -->
             <div id="tab-sales" class="tab-content hidden">
-                <div class="card" style="max-width: 100%;">
+                <div class="card-box">
                     <h3>Today Sales</h3>
-                    <p>Total: SR <span id="stat-total-money">0</span></p>
+                    <p>Total Revenue: SR <span id="stat-total-money">0</span></p>
                     <p>Items Sold: <span id="stat-total-items">0</span></p>
-                    <button onclick="downloadPdf()">📄 Export Sales PDF</button>
-                    <h4 style="margin-top:20px;">Recent Orders</h4>
+                    <button class="app-btn" onclick="downloadPdf()">📄 Export Sales PDF</button>
+                    <h4 style="margin-top:15px;">Recent Orders</h4>
                     <ul id="sales-history-list" style="list-style:none; padding:0;"></ul>
                 </div>
             </div>
 
             <!-- SETTINGS TAB -->
             <div id="tab-settings" class="tab-content hidden">
-                <div class="card" style="max-width: 100%; margin-bottom: 15px;">
+                <div class="card-box">
                     <h4>Add New Item</h4>
                     <input type="text" id="new-item-name" placeholder="Item Name">
                     <input type="number" id="new-item-price" placeholder="Price">
                     <input type="text" id="new-item-img" placeholder="Image URL">
-                    <button onclick="addNewItem()">+ Add Item</button>
+                    <button class="app-btn" onclick="addNewItem()">+ Add Item</button>
                 </div>
-
-                <div class="card" style="max-width: 100%;">
+                <div class="card-box">
                     <h4>Manage Items</h4>
                     <div id="settings-item-list"></div>
                 </div>
@@ -223,13 +344,13 @@
 
     <!-- PIN SECURITY MODAL -->
     <div id="pin-modal" class="modal hidden">
-        <div class="card" style="text-align: center;">
+        <div class="card-box" style="width: 90%; max-width: 350px; text-align: center;">
             <h3>Admin Security</h3>
-            <p>Enter 4-Digit Admin PIN (1234)</p>
-            <input type="password" id="modal-pin-input" maxlength="4" style="text-align: center; font-size: 24px; letter-spacing: 5px;" value="1234">
-            <div style="display:flex; gap: 10px;">
-                <button class="btn-danger" onclick="closePinModal()">Cancel</button>
-                <button onclick="submitPin()">Confirm</button>
+            <p style="color:#aaa; font-size:13px;">Enter 4-Digit Admin PIN (1234)</p>
+            <input type="password" id="modal-pin-input" maxlength="4" style="text-align: center; font-size: 22px; letter-spacing: 5px;" value="1234">
+            <div style="display:flex; gap: 10px; margin-top: 15px;">
+                <button class="app-btn btn-danger" onclick="closePinModal()" style="margin-top:0;">Cancel</button>
+                <button class="app-btn" onclick="submitPin()" style="margin-top:0;">Confirm</button>
             </div>
         </div>
     </div>
@@ -307,7 +428,7 @@
                             <h4 style="margin:5px 0;">${item.name}</h4>
                             <p style="margin:0; color:#d4af37;">SR ${item.price}</p>
                         </div>
-                        <button onclick="addToCart('${item.name}', ${item.price})">+ Add</button>
+                        <button class="app-btn" onclick="addToCart('${item.name}', ${item.price})" style="padding: 6px; font-size:12px;">+ Add</button>
                     </div>
                 `;
             });
@@ -323,7 +444,7 @@
             const cartList = document.getElementById('cart-items');
             cartList.innerHTML = '';
             cart.forEach(item => {
-                cartList.innerHTML += `<li><span>${item.name}</span> <span>SR ${item.price}</span></li>`;
+                cartList.innerHTML += `<li style="display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #333; font-size:13px;"><span>${item.name}</span> <span>SR ${item.price}</span></li>`;
             });
             document.getElementById('total-price').textContent = total;
         }
@@ -355,7 +476,7 @@
                 grandTotalItems += data.itemCount || 0;
                 const itemsText = data.items ? data.items.map(i => i.name).join(', ') : 'Coffee';
                 historyList.innerHTML += `
-                    <li style="padding:8px 0; border-bottom:1px solid #333; display:flex; justify-content:space-between;">
+                    <li style="padding:6px 0; border-bottom:1px solid #333; display:flex; justify-content:space-between; font-size:13px;">
                         <span>${itemsText}</span>
                         <span style="color:#d4af37; font-weight:bold;">SR ${data.totalAmount}</span>
                     </li>
@@ -393,9 +514,9 @@
             listContainer.innerHTML = '';
             menuItems.forEach(item => {
                 listContainer.innerHTML += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #333;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid #333; font-size:13px;">
                         <span>${item.name} - SR ${item.price}</span>
-                        <button class="btn-danger" style="padding:4px 8px; font-size:12px; width:auto;" onclick="deleteMenuItem('${item.id}')">Delete</button>
+                        <button class="app-btn btn-danger" style="padding:3px 8px; font-size:11px; width:auto; margin-top:0;" onclick="deleteMenuItem('${item.id}')">Delete</button>
                     </div>
                 `;
             });
@@ -403,11 +524,4 @@
 
         function deleteMenuItem(id) {
             if(confirm("Are you sure?")) {
-                menuItems = menuItems.filter(item => item.id !== id);
-                localStorage.setItem('pos_items', JSON.stringify(menuItems));
-                loadSettingsItemList();
-            }
-        }
-    </script>
-</body>
-</html>
+                menuIt
