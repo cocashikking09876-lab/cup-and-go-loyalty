@@ -106,7 +106,6 @@
             font-size: 14px;
             outline: none;
         }
-        /* ব্রাউজারের অটো-ফিল ব্যাকগ্রাউন্ড সাদা হয়ে যাওয়া আটকানোর জন্য */
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
         input:-webkit-autofill:focus {
@@ -255,7 +254,7 @@
         <div class="login-card">
             <div class="login-title-row">
                 <h2>Sign in</h2>
-                <button class="create-acc-btn" onclick="alert('Admin Mode Active')">Create account</button>
+                <button type="button" class="create-acc-btn" onclick="alert('Admin Mode Active')">Create account</button>
             </div>
             
             <div class="input-group">
@@ -278,7 +277,7 @@
                 <a href="#" onclick="alert('Just click Log in to enter!')">Forgot your password?</a>
             </div>
 
-            <button class="login-submit-btn" onclick="handleLogin()">Log in</button>
+            <button type="button" class="login-submit-btn" onclick="handleLogin()">Log in</button>
 
             <div class="login-footer-text">
                 By continuing you agree to the Terms & Conditions and Privacy Policy
@@ -290,7 +289,7 @@
     <div id="app-screen" class="hidden">
         <div class="header">
             <h3>Cup & Go POS</h3>
-            <button onclick="handleLogout()" class="btn-danger" style="width: auto; padding: 6px 12px; margin: 0;">Logout</button>
+            <button type="button" onclick="handleLogout()" class="btn-danger" style="width: auto; padding: 6px 12px; margin: 0;">Logout</button>
         </div>
 
         <div class="main-content">
@@ -301,7 +300,7 @@
                     <h3>Current Order</h3>
                     <ul id="cart-items" style="list-style: none; padding: 0; max-height: 120px; overflow-y: auto;"></ul>
                     <h4>Total: SR <span id="total-price">0</span></h4>
-                    <button class="app-btn" onclick="completeSale()" style="background: var(--success-color); color: #fff;">Complete Order</button>
+                    <button type="button" class="app-btn" onclick="completeSale()" style="background: var(--success-color); color: #fff;">Complete Order</button>
                 </div>
             </div>
 
@@ -311,7 +310,7 @@
                     <h3>Today Sales</h3>
                     <p>Total Revenue: SR <span id="stat-total-money">0</span></p>
                     <p>Items Sold: <span id="stat-total-items">0</span></p>
-                    <button class="app-btn" onclick="downloadPdf()">📄 Export Sales PDF</button>
+                    <button type="button" class="app-btn" onclick="downloadPdf()">📄 Export Sales PDF</button>
                     <h4 style="margin-top:15px;">Recent Orders</h4>
                     <ul id="sales-history-list" style="list-style:none; padding:0;"></ul>
                 </div>
@@ -324,7 +323,7 @@
                     <input type="text" id="new-item-name" class="app-input" placeholder="Item Name">
                     <input type="number" id="new-item-price" class="app-input" placeholder="Price">
                     <input type="text" id="new-item-img" class="app-input" placeholder="Image URL">
-                    <button class="app-btn" onclick="addNewItem()">+ Add Item</button>
+                    <button type="button" class="app-btn" onclick="addNewItem()">+ Add Item</button>
                 </div>
                 <div class="card-box">
                     <h4>Manage Items</h4>
@@ -335,15 +334,15 @@
 
         <!-- BOTTOM NAVIGATION -->
         <div class="bottom-nav">
-            <button class="nav-btn active" onclick="switchTab('menu')">
+            <button type="button" class="nav-btn active" onclick="switchTab('menu')">
                 <span>☕</span>
                 <span>Menu</span>
             </button>
-            <button class="nav-btn" onclick="openPinModal('sales')">
+            <button type="button" class="nav-btn" onclick="openPinModal('sales')">
                 <span>📊</span>
                 <span>Sales</span>
             </button>
-            <button class="nav-btn" onclick="openPinModal('settings')">
+            <button type="button" class="nav-btn" onclick="openPinModal('settings')">
                 <span>⚙️</span>
                 <span>Settings</span>
             </button>
@@ -357,8 +356,8 @@
             <p style="color:#aaa; font-size:13px;">Enter 4-Digit Admin PIN (1234)</p>
             <input type="password" id="modal-pin-input" class="app-input" maxlength="4" style="text-align: center; font-size: 22px; letter-spacing: 5px;" value="1234">
             <div style="display:flex; gap: 10px; margin-top: 15px;">
-                <button class="app-btn btn-danger" onclick="closePinModal()" style="margin-top:0;">Cancel</button>
-                <button class="app-btn" onclick="submitPin()" style="margin-top:0;">Confirm</button>
+                <button type="button" class="app-btn btn-danger" onclick="closePinModal()" style="margin-top:0;">Cancel</button>
+                <button type="button" class="app-btn" onclick="submitPin()" style="margin-top:0;">Confirm</button>
             </div>
         </div>
     </div>
@@ -378,7 +377,6 @@
         let salesData = JSON.parse(localStorage.getItem('pos_sales')) || [];
 
         function handleLogin() {
-            // ইমেইল বা পাসওয়ার্ড ফিল্ড চেক না করে সরাসরি অ্যাপে প্রবেশ করানোর ব্যবস্থা করা হয়েছে
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('app-screen').classList.remove('hidden');
             loadMenuItems();
@@ -437,7 +435,7 @@
                             <h4 style="margin:5px 0;">${item.name}</h4>
                             <p style="margin:0; color:#d4af37;">SR ${item.price}</p>
                         </div>
-                        <button class="app-btn" onclick="addToCart('${item.name}', ${item.price})" style="padding: 6px; font-size:12px;">+ Add</button>
+                        <button type="button" class="app-btn" onclick="addToCart('${item.name}', ${item.price})" style="padding: 6px; font-size:12px;">+ Add</button>
                     </div>
                 `;
             });
@@ -523,4 +521,4 @@
             listContainer.innerHTML = '';
             menuItems.forEach(item => {
                 listContainer.innerHTML += `
-                    <div style="disp
+                    <div style="display:f
