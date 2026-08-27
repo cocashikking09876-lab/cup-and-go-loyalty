@@ -1,61 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Cup And Go</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      min-height: 100vh;
-      background: #f7f5f1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 430px;
-      background: white;
-      border-radius: 28px;
-      padding: 32px 24px;
-      box-shadow: 0 15px 45px rgba(0,0,0,0.10);
-    }
-
-    .logo {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .logo-icon {
-      width: 76px;
-      height: 76px;
-      margin: auto;
-      border-radius: 24px;
-      background: #171717;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 34px;
-    }
-
-    .logo h1 {
-      margin-top: 15px;
-      font-size: 28px;
-    }
-
-    .logo p {
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -88,7 +30,7 @@
       background: white;
       border-radius: 28px;
       padding: 32px 24px;
-      box-shadow: 0 15px 45px rgba(0,0,0,0.10);
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.10);
     }
 
     .logo {
@@ -282,6 +224,9 @@
 
   </div>
 
+
+  <!-- Firebase -->
+
   <script type="module">
 
     import { initializeApp } from
@@ -293,38 +238,71 @@
     } from
       "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
+
     const firebaseConfig = {
+
       apiKey: "AIzaSyD0ZT0MVnyGvru0gRKcF1UkRR-jBCDSFys",
+
       authDomain: "cup-and-go-rewards.firebaseapp.com",
+
       projectId: "cup-and-go-rewards",
+
       storageBucket: "cup-and-go-rewards.firebasestorage.app",
+
       messagingSenderId: "400656059060",
+
       appId: "1:400656059060:web:43f5153aae2f4e1a88a5e1",
+
       measurementId: "G-NKDSWRB21B"
+
     };
 
+
     const app = initializeApp(firebaseConfig);
+
     const auth = getAuth(app);
 
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const loginButton = document.getElementById("loginButton");
-    const message = document.getElementById("message");
+
+    const emailInput =
+      document.getElementById("email");
+
+    const passwordInput =
+      document.getElementById("password");
+
+    const loginButton =
+      document.getElementById("loginButton");
+
+    const message =
+      document.getElementById("message");
+
 
     loginButton.addEventListener("click", async () => {
 
-      const email = emailInput.value.trim();
-      const password = passwordInput.value;
+      const email =
+        emailInput.value.trim();
+
+      const password =
+        passwordInput.value;
+
 
       message.textContent = "";
 
+
       if (!email || !password) {
-        message.textContent = "Please enter your email and password.";
+
+        message.textContent =
+          "Please enter your email and password.";
+
         return;
+
       }
 
+
       loginButton.disabled = true;
-      loginButton.textContent = "Signing in...";
+
+      loginButton.textContent =
+        "Signing in...";
+
 
       try {
 
@@ -335,105 +313,74 @@
             password
           );
 
+
         console.log(
           "Admin logged in:",
           userCredential.user.email
         );
 
-        message.textContent = "Login successful!";
 
-        // Next step: Admin Dashboard
+        message.textContent =
+          "Login successful!";
+
 
       } catch (error) {
 
-        console.error("Firebase Login Error:", error);
+        console.error(
+          "Firebase Login Error:",
+          error
+        );
+
 
         if (
-          error.code === "auth/invalid-credential"
+          error.code ===
+          "auth/invalid-credential"
         ) {
+
           message.textContent =
             "Invalid email or password.";
+
         } else if (
-          error.code === "auth/user-not-found"
+          error.code ===
+          "auth/user-not-found"
         ) {
+
           message.textContent =
             "Admin account not found.";
+
         } else if (
-          error.code === "auth/wrong-password"
+          error.code ===
+          "auth/wrong-password"
         ) {
+
           message.textContent =
             "Incorrect password.";
+
         } else {
+
           message.textContent =
             "Login failed. Please try again.";
+
         }
 
       } finally {
 
         loginButton.disabled = false;
-        loginButton.textContent = "Sign In";
+
+        loginButton.textContent =
+          "Sign In";
 
       }
 
     });
 
-    console.log("Cup And Go Firebase connected");
+
+    console.log(
+      "Cup And Go Firebase connected"
+    );
 
   </script>
 
 </body>
 </html>
 ```
-      Language
-
-      <div class="languages">
-
-        <button>
-          English
-        </button>
-
-        <button>
-          العربية
-        </button>
-
-        <button>
-          বাংলা
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</body>
-```html
-</body>
-
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
-  import {
-    getAuth,
-    signInWithEmailAndPassword
-  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyD0ZT0MVnyGvru0gRKcF1UkRR-jBCDSFys",
-    authDomain: "cup-and-go-rewards.firebaseapp.com",
-    projectId: "cup-and-go-rewards",
-    storageBucket: "cup-and-go-rewards.firebasestorage.app",
-    messagingSenderId: "400656059060",
-    appId: "1:400656059060:web:43f5153aae2f4e1a88a5e1",
-    measurementId: "G-NKDSWRB21B"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  console.log("Cup And Go Firebase connected");
-</script>
-
-</html>
-```
-
