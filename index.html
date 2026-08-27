@@ -101,13 +101,21 @@
             padding: 12px 15px 12px 40px;
             border-radius: 12px;
             border: 1px solid #e1e1e1;
-            background: #fafafa;
+            background: #fafafa !important;
+            color: #1a1a1a !important;
             font-size: 14px;
             outline: none;
         }
+        /* ব্রাউজারের অটো-ফিল ব্যাকগ্রাউন্ড সাদা হয়ে যাওয়া আটকানোর জন্য */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus {
+            -webkit-box-shadow: 0 0 0 30px #fafafa inset !important;
+            -webkit-text-fill-color: #1a1a1a !important;
+        }
         .input-field-wrapper input:focus {
             border-color: var(--primary-orange);
-            background: #fff;
+            background: #fff !important;
         }
         .input-icon {
             position: absolute;
@@ -204,7 +212,7 @@
             margin-bottom: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
-        input, select {
+        .app-input {
             width: 100%;
             padding: 10px;
             margin: 8px 0;
@@ -267,7 +275,7 @@
             </div>
 
             <div class="forgot-pass">
-                <a href="#" onclick="alert('Default password is 123456')">Forgot your password?</a>
+                <a href="#" onclick="alert('Just click Log in to enter!')">Forgot your password?</a>
             </div>
 
             <button class="login-submit-btn" onclick="handleLogin()">Log in</button>
@@ -313,9 +321,9 @@
             <div id="tab-settings" class="tab-content hidden">
                 <div class="card-box">
                     <h4>Add New Item</h4>
-                    <input type="text" id="new-item-name" placeholder="Item Name">
-                    <input type="number" id="new-item-price" placeholder="Price">
-                    <input type="text" id="new-item-img" placeholder="Image URL">
+                    <input type="text" id="new-item-name" class="app-input" placeholder="Item Name">
+                    <input type="number" id="new-item-price" class="app-input" placeholder="Price">
+                    <input type="text" id="new-item-img" class="app-input" placeholder="Image URL">
                     <button class="app-btn" onclick="addNewItem()">+ Add Item</button>
                 </div>
                 <div class="card-box">
@@ -347,7 +355,7 @@
         <div class="card-box" style="width: 90%; max-width: 350px; text-align: center;">
             <h3>Admin Security</h3>
             <p style="color:#aaa; font-size:13px;">Enter 4-Digit Admin PIN (1234)</p>
-            <input type="password" id="modal-pin-input" maxlength="4" style="text-align: center; font-size: 22px; letter-spacing: 5px;" value="1234">
+            <input type="password" id="modal-pin-input" class="app-input" maxlength="4" style="text-align: center; font-size: 22px; letter-spacing: 5px;" value="1234">
             <div style="display:flex; gap: 10px; margin-top: 15px;">
                 <button class="app-btn btn-danger" onclick="closePinModal()" style="margin-top:0;">Cancel</button>
                 <button class="app-btn" onclick="submitPin()" style="margin-top:0;">Confirm</button>
@@ -370,6 +378,7 @@
         let salesData = JSON.parse(localStorage.getItem('pos_sales')) || [];
 
         function handleLogin() {
+            // ইমেইল বা পাসওয়ার্ড ফিল্ড চেক না করে সরাসরি অ্যাপে প্রবেশ করানোর ব্যবস্থা করা হয়েছে
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('app-screen').classList.remove('hidden');
             loadMenuItems();
@@ -514,14 +523,4 @@
             listContainer.innerHTML = '';
             menuItems.forEach(item => {
                 listContainer.innerHTML += `
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid #333; font-size:13px;">
-                        <span>${item.name} - SR ${item.price}</span>
-                        <button class="app-btn btn-danger" style="padding:3px 8px; font-size:11px; width:auto; margin-top:0;" onclick="deleteMenuItem('${item.id}')">Delete</button>
-                    </div>
-                `;
-            });
-        }
-
-        function deleteMenuItem(id) {
-            if(confirm("Are you sure?")) {
-                menuIt
+                    <div style="disp
