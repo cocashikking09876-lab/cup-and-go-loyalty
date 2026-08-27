@@ -202,4 +202,29 @@
   </div>
 
 </body>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+  import {
+    getAuth,
+    signInWithEmailAndPassword
+  } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyD0ZT0MVnyGvru0gRKcF1UkRR-jBCDSFys",
+    authDomain: "cup-and-go-rewards.firebaseapp.com",
+    projectId: "cup-and-go-rewards",
+    storageBucket: "cup-and-go-rewards.firebasestorage.app",
+    messagingSenderId: "400656059060",
+    appId: "1:400656059060:web:43f5153aae2f4e1a88a5e1",
+    measurementId: "G-NKDSWRB21B"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  console.log("Cup And Go Firebase connected");
+</script>
+
 </html>
