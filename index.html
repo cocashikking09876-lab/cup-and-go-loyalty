@@ -1,103 +1,217 @@
-```html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cup & Go POS</title>
+    <!-- html2pdf Library -->
+    <script src="[https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js](https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js)"></script>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --accent-color: #d4af37;
+            --text-color: #ffffff;
+            --text-secondary: #aaa;
+            --danger-color: #ff5252;
+            --success-color: #4caf50;
+        }
 
-  <title>Cup And Go</title>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding-bottom: 70px;
+        }
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        body.rtl { direction: rtl; }
+        .hidden { display: none !important; }
 
-    body {
-      font-family: Arial, sans-serif;
-      min-height: 100vh;
-      background: #f7f5f1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-    .app {
-      width: 100%;
-      max-width: 430px;
-      background: white;
-      border-radius: 28px;
-      padding: 32px 24px;
-      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.10);
-    }
+        .card {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+        }
 
-    .logo {
-      text-align: center;
-      margin-bottom: 30px;
-    }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: 1px solid #333;
+            background: #2a2a2a;
+            color: #fff;
+            box-sizing: border-box;
+        }
 
-    .logo-icon {
-      width: 76px;
-      height: 76px;
-      margin: auto;
-      border-radius: 24px;
-      background: #171717;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 34px;
-    }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 6px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
 
-    .logo h1 {
-      margin-top: 15px;
-      font-size: 28px;
-    }
+        .btn-danger { background: var(--danger-color); color: #fff; }
 
-    .logo p {
-      margin-top: 7px;
-      color: #777;
-      font-size: 14px;
-    }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: var(--card-bg);
+            border-bottom: 1px solid #333;
+        }
 
-    h2 {
-      font-size: 22px;
-      margin-bottom: 8px;
-    }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0; left: 0; right: 0;
+            height: 60px;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #333;
+            z-index: 100;
+        }
 
-    .subtitle {
-      color: #777;
-      font-size: 14px;
-      margin-bottom: 24px;
-    }
+        .nav-btn {
+            background: none;
+            color: var(--text-secondary);
+            border: none;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0; width: auto; margin: 0;
+        }
 
-    label {
-      display: block;
-      font-size: 13px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
+        .nav-btn.active { color: var(--accent-color); }
+        .main-content { padding: 15px; }
 
-    input {
-      width: 100%;
-      padding: 15px;
-      border: 1px solid #ddd;
-      border-radius: 14px;
-      font-size: 15px;
-      margin-bottom: 17px;
-      outline: none;
-    }
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+        }
 
-    input:focus {
-      border-color: #222;
-    }
+        .item-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-    .login-btn {
-      width: 100%;
-      padding: 16px;
-      border: none;
+        .item-img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .cart-section {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .cart-list {
+            list-style: none;
+            padding: 0;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .cart-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+
+        #pdf-template {
+            background: #fff;
+            color: #000;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        #pdf-template table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        #pdf-template th, #pdf-template td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LOGIN SCREEN -->
+    <div id="login-screen" class="login-container">
+        <div class="card">
+            <h2 data-i18n="loginTitle">☕ Coffee Shop Login</h2>
+            <input type="email" id="email" placeholder="Email" autocomplete="off" value="cocashikking09876@gmail.com">
+            <input type="password" id="password" placeholder="Password" autocomplete="off">
+            <button id="loginBtn" type="button" onclick="handleLogin()" data-i18n="loginBtn">Login</button>
+        </div>
+    </div>
+
+    <!-- MAIN APP SCREEN -->
+    <div id="app-screen" class="hidden">
+        <div class="header">
+            <h3>Cup & Go</h3>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                <select id="langSelect" style="width: auto; padding: 5px;" onchange="changeLang(this.value)">
+                    <option value="en">English</option>
+                    <option value="ar">العربية</option>
+                </select>
+                <button id="logoutBtn" onclick="handleLogout()" class="btn-danger" style="width: auto; padding: 6px 12px; margin: 0;" data-i18n="logoutBtn">Logout</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- MENU TAB -->
+            <div id="tab-menu" class="tab-content">
+                <div class="item-grid" id="menu-container"></div>
+                <div class="cart-section">
+                    <h3 data-i18n="cartTitle">Current Order</h3>
+                    <ul class="cart-list" id="cart-items"></ul>
+                    <h4>
       border-radius: 15px;
       background: #171717;
       color: white;
