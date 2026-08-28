@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Cup And Go — Premium POS</title>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 <style>
@@ -14,1027 +13,599 @@
   --green:#00b894;
   --red:#ff5252;
   --blue:#5b67f1;
-  --bg:#f5f6fa;
+  --bg:#f4f6f9;
   --card:#ffffff;
-  --text:#202124;
-  --muted:#7b8088;
-  --border:#eceef2;
-  --shadow:0 12px 35px rgba(20,25,35,.07);
-  --radius:22px;
+  --text:#2d3436;
+  --muted:#636e72;
+  --border:#dfe6e9;
+  --shadow:0 10px 30px rgba(0,0,0,0.06);
 }
-
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  font-family:Inter,Segoe UI,Arial,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-}
-button,input,select{font:inherit}
-button{cursor:pointer}
-.hidden{display:none!important}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif;}
+body{background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:90px;overflow-x:hidden;}
+button,input,select{font:inherit;}
+button{cursor:pointer;}
+.hidden{display:none!important;}
 
 body.dark{
-  --bg:#101114;
-  --card:#1a1c20;
-  --text:#f5f6f7;
-  --muted:#a7abb3;
-  --border:#2a2d33;
-  --shadow:0 15px 40px rgba(0,0,0,.25);
+  --bg:#121212;--card:#1e1e1e;--text:#f5f6f7;--muted:#b2bec3;--border:#2d3436;
 }
 
-/* APP */
-.app{
-  min-height:100vh;
-  display:flex;
+/* INTRO SPLASH */
+#intro-screen{
+  position:fixed;inset:0;background:linear-gradient(135deg,#ff7a00,#ff9f43);color:white;
+  z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 0.6s ease, visibility 0.6s ease;
 }
+.intro-logo{width:90px;height:90px;border-radius:28px;background:#fff;color:var(--orange);display:flex;align-items:center;justify-content:center;font-size:45px;box-shadow:0 20px 40px rgba(0,0,0,0.2);animation:bounce 1.5s infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 
-/* SIDEBAR */
-.sidebar{
-  width:255px;
-  position:fixed;
-  left:0;
-  top:0;
-  bottom:0;
-  background:var(--card);
-  border-right:1px solid var(--border);
-  padding:24px 16px;
-  z-index:50;
-  display:flex;
-  flex-direction:column;
-  transition:.35s ease;
-}
+/* HEADER & TOP BANNER */
+.top-header{background:linear-gradient(135deg,#ff7a00,#ff9f43);padding:20px;border-radius:0 0 30px 30px;color:white;box-shadow:0 10px 25px rgba(255,122,0,0.3);}
+.header-row{display:flex;justify-content:space-between;align-items:center;}
+.brand-badge{width:45px;height:45px;background:rgba(255,255,255,0.2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.top-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px;}
+.stat-box{background:rgba(255,255,255,0.18);backdrop-filter:blur(5px);padding:10px 6px;border-radius:14px;text-align:center;}
+.stat-box h3{font-size:15px;font-weight:800;}
+.stat-box span{font-size:9px;opacity:0.9;text-transform:uppercase;}
 
-.logo{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  padding:6px 10px 28px;
-}
-.logo-mark{
-  width:48px;
-  height:48px;
-  border-radius:16px;
-  background:linear-gradient(135deg,var(--orange),var(--orange2));
-  color:white;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:23px;
-  box-shadow:0 10px 25px rgba(255,122,0,.3);
-}
-.logo h1{
-  font-size:19px;
-  font-weight:800;
-}
-.logo span{
-  display:block;
-  font-size:11px;
-  color:var(--muted);
-  margin-top:2px;
-}
+/* CONTAINER & SECTIONS */
+.container{padding:15px;max-width:600px;margin:auto;}
+.section-title{font-size:14px;font-weight:800;color:var(--text);margin:15px 0 10px 5px;display:flex;align-items:center;gap:6px;}
+.section-title::before{content:"";width:4px;height:14px;background:var(--orange);border-radius:2px;}
 
-.nav-title{
-  color:var(--muted);
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:1.3px;
-  padding:10px 12px;
-  font-weight:800;
-}
+/* QUICK ACTIONS GRID */
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.quick-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:12px 8px;text-align:center;box-shadow:var(--shadow);transition:0.3s;cursor:pointer;}
+.quick-card:hover{transform:translateY(-3px);border-color:var(--orange);}
+.quick-icon{width:40px;height:40px;border-radius:12px;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:18px;}
 
-.nav{
-  display:flex;
-  flex-direction:column;
-  gap:5px;
-}
+/* BOTTOM NAV BAR */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:var(--card);border-top:1px solid var(--border);display:flex;justify-content:around;align-items:center;padding:0 5px;z-index:1000;box-shadow:0 -5px 20px rgba(0,0,0,0.05);}
+.nav-item{flex:1;text-align:center;background:none;border:none;color:var(--muted);font-size:10px;font-weight:700;cursor:pointer;transition:0.2s;}
+.nav-item i{display:block;font-size:18px;margin-bottom:2px;}
+.nav-item.active{color:var(--orange);}
+.nav-scan{width:50px;height:50px;background:linear-gradient(135deg,#ff7a00,#ff9f43);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:22px;box-shadow:0 8px 20px rgba(255,122,0,0.4);margin-top:-18px;border:4px solid var(--bg);}
 
-.nav button{
-  border:0;
-  background:transparent;
-  color:var(--muted);
-  width:100%;
-  padding:13px 14px;
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  gap:13px;
-  text-align:left;
-  font-size:14px;
-  font-weight:650;
-  transition:.2s;
-}
-.nav button:hover{
-  background:rgba(255,122,0,.08);
-  color:var(--orange);
-  transform:translateX(3px);
-}
-.nav button.active{
-  background:linear-gradient(90deg,rgba(255,122,0,.14),rgba(255,122,0,.04));
-  color:var(--orange);
-}
-.nav-icon{
-  width:25px;
-  text-align:center;
-  font-size:19px;
-}
+/* PAGES */
+.page{display:none;animation:fadeIn 0.3s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-.sidebar-bottom{
-  margin-top:auto;
-}
-.store-status{
-  background:linear-gradient(135deg,#202328,#383d44);
-  color:white;
-  padding:17px;
-  border-radius:18px;
-  margin-bottom:14px;
-}
-.status-dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:#00e676;
-  display:inline-block;
-  margin-right:6px;
-  box-shadow:0 0 10px #00e676;
-}
-.store-status small{color:#bfc3c8}
+/* POS PRODUCTS */
+.products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:10px;}
+.product-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:12px;text-align:center;box-shadow:var(--shadow);cursor:pointer;transition:0.2s;}
+.product-card:hover{transform:translateY(-2px);border-color:var(--orange);}
+.p-icon{font-size:40px;margin-bottom:8px;height:45px;display:flex;align-items:center;justify-content:center;}
+.p-icon img{width:45px;height:45px;object-fit:cover;border-radius:8px;}
+.p-price{color:var(--orange);font-weight:800;font-size:13px;margin-top:6px;}
 
-/* MAIN */
-.main{
-  margin-left:255px;
-  width:calc(100% - 255px);
-  min-height:100vh;
-}
+/* GENERAL UI */
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:16px;box-shadow:var(--shadow);margin-bottom:12px;}
+table{width:100%;border-collapse:collapse;}
+th,td{padding:12px 10px;text-align:left;border-bottom:1px solid var(--border);font-size:12px;}
+th{color:var(--muted);font-size:10px;text-transform:uppercase;}
+.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:750;font-size:12px;cursor:pointer;}
+.btn-primary{background:linear-gradient(135deg,#ff7a00,#ff9f43);color:white;}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(5px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal-box{width:100%;max-width:380px;background:var(--card);border-radius:24px;padding:20px;box-shadow:0 20px 50px rgba(0,0,0,0.3);}
+.field{margin-bottom:10px;}
+.field label{display:block;color:var(--muted);font-size:11px;font-weight:700;margin-bottom:4px;}
+.field input, .field select{width:100%;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:8px;padding:9px;}
 
-/* TOPBAR */
-.topbar{
-  height:76px;
-  background:var(--card);
-  border-bottom:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 30px;
-  position:sticky;
-  top:0;
-  z-index:40;
-}
-.page-heading h2{
-  font-size:20px;
-  font-weight:800;
-}
-.page-heading p{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:3px;
-}
-.top-actions{
-  display:flex;
-  gap:9px;
-}
-.icon-btn{
-  width:42px;
-  height:42px;
-  border:1px solid var(--border);
-  background:var(--card);
-  color:var(--text);
-  border-radius:13px;
-  font-size:18px;
-  transition:.2s;
-}
-.icon-btn:hover{
-  border-color:var(--orange);
-  color:var(--orange);
-  transform:translateY(-2px);
-}
-.mobile-menu{display:none}
-
-/* CONTENT */
-.content{
-  padding:28px;
-  max-width:1600px;
-  margin:auto;
-}
-
-/* PAGE */
-.page{
-  display:none;
-  animation:pageIn .35s ease;
-}
-.page.active{display:block}
-
-@keyframes pageIn{
-  from{opacity:0;transform:translateY(12px)}
-  to{opacity:1;transform:none}
-}
-
-/* DASHBOARD */
-.hero{
-  background:linear-gradient(135deg,#17191d,#30343b);
-  color:white;
-  padding:28px;
-  border-radius:28px;
-  position:relative;
-  overflow:hidden;
-  margin-bottom:22px;
-}
-.hero:after{
-  content:"☕";
-  position:absolute;
-  right:50px;
-  top:-35px;
-  font-size:180px;
-  opacity:.07;
-}
-.hero h1{
-  font-size:28px;
-  margin-bottom:7px;
-}
-.hero p{
-  color:#c8cbd0;
-  font-size:13px;
-}
-.hero-btn{
-  margin-top:20px;
-  background:linear-gradient(135deg,var(--orange),var(--orange2));
-  border:0;
-  color:white;
-  padding:13px 19px;
-  border-radius:13px;
-  font-weight:750;
-  box-shadow:0 10px 25px rgba(255,122,0,.25);
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:16px;
-  margin-bottom:22px;
-}
-.stat{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:20px;
-  box-shadow:var(--shadow);
-  transition:.25s;
-}
-.stat:hover{
-  transform:translateY(-4px);
-}
-.stat-top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-.stat-icon{
-  width:43px;
-  height:43px;
-  border-radius:14px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:19px;
-}
-.orange{background:#fff0e3;color:var(--orange)}
-.green{background:#e8fbf5;color:var(--green)}
-.blue{background:#eef0ff;color:var(--blue)}
-.red{background:#ffeded;color:var(--red)}
-.stat-value{
-  font-size:25px;
-  font-weight:850;
-  margin-top:14px;
-}
-.stat-label{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:4px;
-}
-
-.grid-2{
-  display:grid;
-  grid-template-columns:1.45fr 1fr;
-  gap:18px;
-}
-
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:22px;
-  padding:21px;
-  box-shadow:var(--shadow);
-  margin-bottom:18px;
-}
-.card-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:17px;
-}
-.card-head h3{
-  font-size:16px;
-}
-.card-head span{
-  color:var(--muted);
-  font-size:11px;
-}
-
-.chart{
-  height:230px;
-  display:flex;
-  align-items:end;
-  gap:9px;
-  padding:15px 4px 0;
-}
-.bar-wrap{
-  flex:1;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  justify-content:end;
-  align-items:center;
-  gap:7px;
-}
-.bar{
-  width:100%;
-  max-width:38px;
-  min-height:4px;
-  border-radius:9px 9px 4px 4px;
-  background:linear-gradient(to top,var(--orange),var(--orange2));
-  animation:barIn .8s ease both;
-}
-.bar-label{
-  color:var(--muted);
-  font-size:9px;
-}
-@keyframes barIn{
-  from{height:0!important}
-}
-
-.quick-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-}
-.quick{
-  border:1px solid var(--border);
-  background:var(--card);
-  border-radius:17px;
-  padding:18px;
-  text-align:left;
-  transition:.2s;
-}
-.quick:hover{
-  transform:translateY(-3px);
-  border-color:var(--orange);
-}
-.quick strong{
-  display:block;
-  font-size:13px;
-  margin-top:9px;
-}
-.quick small{
-  color:var(--muted);
-  font-size:10px;
-}
-
-/* PAGE TOOLBAR */
-.toolbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:18px;
-}
-.toolbar-left{
-  display:flex;
-  gap:9px;
-  flex:1;
-}
-.search{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:13px;
-  padding:12px 14px;
-  color:var(--text);
-  outline:none;
-  width:100%;
-  max-width:320px;
-}
-.search:focus{border-color:var(--orange)}
-
-.btn{
-  border:0;
-  border-radius:13px;
-  padding:12px 17px;
-  font-weight:750;
-  transition:.2s;
-}
-.btn-primary{
-  background:linear-gradient(135deg,var(--orange),var(--orange2));
-  color:white;
-  box-shadow:0 8px 20px rgba(255,122,0,.22);
-}
-.btn-success{
-  background:var(--green);
-  color:white;
-}
-.btn-danger{
-  background:var(--red);
-  color:white;
-}
-.btn-light{
-  background:var(--card);
-  color:var(--text);
-  border:1px solid var(--border);
-}
-.btn:hover{transform:translateY(-2px)}
-
-/* POS */
-.pos-layout{
-  display:grid;
-  grid-template-columns:1.55fr .8fr;
-  gap:18px;
-}
-.categories{
-  display:flex;
-  gap:8px;
-  overflow:auto;
-  padding-bottom:4px;
-  margin-bottom:15px;
-}
-.cat{
-  white-space:nowrap;
-  border:1px solid var(--border);
-  background:var(--card);
-  color:var(--muted);
-  padding:9px 14px;
-  border-radius:12px;
-  font-size:12px;
-}
-.cat.active{
-  background:var(--orange);
-  color:white;
-  border-color:var(--orange);
-}
-.products-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:13px;
-}
-.product{
-  border:1px solid var(--border);
-  background:var(--card);
-  border-radius:18px;
-  overflow:hidden;
-  transition:.25s;
-  cursor:pointer;
-}
-.product:hover{
-  transform:translateY(-4px);
-  box-shadow:var(--shadow);
-  border-color:rgba(255,122,0,.4);
-}
-.product-img{
-  height:125px;
-  background:linear-gradient(135deg,#f2f3f5,#e4e6e9);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:45px;
-}
-.product-info{
-  padding:13px;
-}
-.product-name{
-  font-weight:750;
-  font-size:13px;
-}
-.product-category{
-  color:var(--muted);
-  font-size:10px;
-  margin-top:3px;
-}
-.product-bottom{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-top:11px;
-}
-.product-price{
-  color:var(--orange);
-  font-weight:800;
-  font-size:13px;
-}
-.add-btn{
-  width:29px;
-  height:29px;
-  border:0;
-  border-radius:9px;
-  color:white;
-  background:var(--orange);
-  font-weight:bold;
-}
-
-.cart-card{
-  position:sticky;
-  top:95px;
-}
-.cart-list{
-  min-height:180px;
-  max-height:390px;
-  overflow:auto;
-}
-.cart-row{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:8px;
-  padding:12px 0;
-  border-bottom:1px solid var(--border);
-}
-.cart-row strong{font-size:12px}
-.cart-row small{
-  color:var(--muted);
-  display:block;
-  margin-top:3px;
-}
-.qty{
-  display:flex;
-  align-items:center;
-  gap:7px;
-}
-.qty button{
-  width:26px;
-  height:26px;
-  border:1px solid var(--border);
-  background:var(--card);
-  color:var(--text);
-  border-radius:7px;
-}
-.total-box{
-  border-top:1px solid var(--border);
-  margin-top:12px;
-  padding-top:15px;
-}
-.total-line{
-  display:flex;
-  justify-content:space-between;
-  padding:5px 0;
-  color:var(--muted);
-  font-size:13px;
-}
-.total-line.final{
-  color:var(--text);
-  font-size:18px;
-  font-weight:850;
-  padding-top:12px;
-}
-
-/* TABLE */
-.table-wrap{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:22px;
-  overflow:auto;
-  box-shadow:var(--shadow);
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:720px;
-}
-th,td{
-  padding:15px 18px;
-  text-align:left;
-  border-bottom:1px solid var(--border);
-  font-size:12px;
-}
-th{
-  color:var(--muted);
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:.5px;
-  background:rgba(127,127,127,.035);
-}
-tr:last-child td{border-bottom:0}
-.badge{
-  display:inline-flex;
-  padding:6px 9px;
-  border-radius:9px;
-  font-size:10px;
-  font-weight:750;
-}
-.badge-green{background:#e7fbf3;color:#008f70}
-.badge-orange{background:#fff0e3;color:#d96400}
-.badge-red{background:#ffeded;color:#dc3b3b}
-
-/* FORM */
-.form-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
-}
-.field label{
-  display:block;
-  color:var(--muted);
-  font-size:11px;
-  font-weight:700;
-  margin-bottom:6px;
-}
-.field input,.field select,.field textarea{
-  width:100%;
-  border:1px solid var(--border);
-  background:var(--card);
-  color:var(--text);
-  border-radius:12px;
-  padding:12px;
-  outline:none;
-}
-.field input:focus,.field select:focus{
-  border-color:var(--orange);
-}
-.form-actions{
-  display:flex;
-  justify-content:flex-end;
-  gap:8px;
-  margin-top:17px;
-}
-
-/* REPORT */
-.report-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-}
-.report-card{
-  padding:19px;
-  border:1px solid var(--border);
-  border-radius:18px;
-  background:var(--card);
-}
-.report-card small{color:var(--muted)}
-.report-card strong{
-  display:block;
-  font-size:23px;
-  margin-top:9px;
-}
-
-/* SETTINGS */
-.setting{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  padding:17px 0;
-  border-bottom:1px solid var(--border);
-}
-.setting:last-child{border-bottom:0}
-.setting h4{font-size:13px}
-.setting p{font-size:10px;color:var(--muted);margin-top:3px}
-.switch{
-  width:48px;
-  height:26px;
-  border-radius:30px;
-  background:#d8dadd;
-  position:relative;
-  border:0;
-}
-.switch.on{background:var(--orange)}
-.switch:after{
-  content:"";
-  width:20px;
-  height:20px;
-  background:white;
-  border-radius:50%;
-  position:absolute;
-  top:3px;
-  left:4px;
-  transition:.25s;
-}
-.switch.on:after{left:24px}
-
-/* MODAL */
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.62);
-  backdrop-filter:blur(7px);
-  z-index:100;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-}
-.modal-box{
-  width:100%;
-  max-width:510px;
-  background:var(--card);
-  color:var(--text);
-  border-radius:25px;
-  padding:23px;
-  box-shadow:0 25px 80px rgba(0,0,0,.25);
-  animation:modalIn .3s ease;
-}
-@keyframes modalIn{
-  from{opacity:0;transform:scale(.94) translateY(12px)}
-  to{opacity:1;transform:none}
-}
-.modal-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:20px;
-}
-.close{
-  width:34px;height:34px;
-  border:0;background:var(--bg);
-  color:var(--text);
-  border-radius:10px;
-}
-
-/* TOAST */
-.toast{
-  position:fixed;
-  right:25px;
-  bottom:25px;
-  background:#202328;
-  color:white;
-  padding:14px 19px;
-  border-radius:14px;
-  z-index:300;
-  box-shadow:0 15px 35px rgba(0,0,0,.2);
-  transform:translateY(100px);
-  opacity:0;
-  transition:.35s;
-  font-size:13px;
-}
-.toast.show{
-  transform:none;
-  opacity:1;
-}
-
-/* EMPTY */
-.empty{
-  text-align:center;
-  padding:55px 20px;
-  color:var(--muted);
-}
-.empty-icon{font-size:45px;margin-bottom:12px}
-.empty h3{color:var(--text);font-size:15px}
-.empty p{font-size:11px;margin-top:5px}
-
-/* MOBILE */
-@media(max-width:1000px){
-  .stats{grid-template-columns:repeat(2,1fr)}
-  .grid-2,.pos-layout{grid-template-columns:1fr}
-  .cart-card{position:relative;top:0}
-  .products-grid{grid-template-columns:repeat(2,1fr)}
-}
-
-@media(max-width:720px){
-  .sidebar{
-    transform:translateX(-100%);
-    box-shadow:20px 0 40px rgba(0,0,0,.12);
-  }
-  .sidebar.open{transform:none}
-  .main{
-    margin-left:0;
-    width:100%;
-  }
-  .topbar{
-    padding:0 16px;
-  }
-  .mobile-menu{
-    display:block;
-    margin-right:8px;
-  }
-  .page-heading h2{font-size:17px}
-  .content{padding:16px}
-  .stats{grid-template-columns:1fr 1fr;gap:10px}
-  .stat{padding:15px}
-  .stat-value{font-size:20px}
-  .hero{padding:21px}
-  .hero h1{font-size:22px}
-  .products-grid{grid-template-columns:repeat(2,1fr);gap:10px}
-  .product-img{height:100px}
-  .toolbar{align-items:stretch;flex-direction:column}
-  .toolbar-left{width:100%}
-  .search{max-width:none}
-  .report-grid{grid-template-columns:1fr}
-  .form-grid{grid-template-columns:1fr}
-  .quick-grid{grid-template-columns:1fr 1fr}
+/* GREEN TOAST */
+#toast-msg {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  color: #00b894;
+  font-weight: 800;
+  font-size: 14px;
+  background: transparent;
+  padding: 0;
+  z-index: 99999;
+  opacity: 0;
+  transition: 0.3s ease;
+  pointer-events: none;
+  text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+#toast-msg.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 </style>
 </head>
-
 <body>
 
-<div class="app">
+<!-- INTRO SPLASH -->
+<div id="intro-screen">
+  <div class="intro-logo">☕</div>
+  <h2 style="font-size:22px;font-weight:800;margin-top:10px;">Cup And Go</h2>
+  <p style="opacity:0.8;font-size:11px;">Premium POS System</p>
+</div>
 
-<!-- SIDEBAR -->
-<aside class="sidebar" id="sidebar">
+<!-- TOAST MESSAGE -->
+<div id="toast-msg">Payment Successful!</div>
 
-  <div class="logo">
-    <div class="logo-mark">☕</div>
-    <div>
-      <h1>Cup And Go</h1>
-      <span>Premium POS System</span>
-    </div>
-  </div>
-
-  <div class="nav-title">Main Menu</div>
-
-  <nav class="nav">
-    <button class="active" onclick="showPage('dashboard',this)">
-      <span class="nav-icon">⌂</span> Dashboard
-    </button>
-
-    <button onclick="showPage('sales',this)">
-      <span class="nav-icon">🛒</span> Sales
-    </button>
-
-    <button onclick="showPage('orders',this)">
-      <span class="nav-icon">🧾</span> Orders
-    </button>
-
-    <button onclick="showPage('products',this)">
-      <span class="nav-icon">📦</span> Products
-    </button>
-
-    <button onclick="showPage('menu',this)">
-      <span class="nav-icon">☕</span> Menu
-    </button>
-
-    <button onclick="showPage('transactions',this)">
-      <span class="nav-icon">💳</span> Transactions
-    </button>
-
-    <button onclick="showPage('reports',this)">
-      <span class="nav-icon">📊</span> Reports
-    </button>
-  </nav>
-
-  <div class="nav-title">System</div>
-
-  <nav class="nav">
-    <button onclick="showPage('settings',this)">
-      <span class="nav-icon">⚙️</span> Settings
-    </button>
-  </nav>
-
-  <div class="sidebar-bottom">
-    <div class="store-status">
-      <div style="font-weight:750;font-size:13px">● Store Online</div>
-      <small>Cloud database connected</small>
-    </div>
-  </div>
-
-</aside>
-
-<!-- MAIN -->
-<main class="main">
-
-<header class="topbar">
-  <div style="display:flex;align-items:center">
-    <button class="icon-btn mobile-menu" onclick="toggleSidebar()">☰</button>
-
-    <div class="page-heading">
-      <h2 id="page-title">Dashboard</h2>
-      <p id="page-subtitle">Welcome to your Cup And Go control center</p>
-    </div>
-  </div>
-
-  <div class="top-actions">
-    <button class="icon-btn" onclick="toggleDark()">🌙</button>
-    <button class="icon-btn" onclick="notify('You are all caught up 🔔')">🔔</button>
-  </div>
-</header>
-
-<div class="content">
-
-<!-- DASHBOARD -->
-<section id="page-dashboard" class="page active">
-
-  <div class="hero">
-    <h1>Good day, Cup And Go ☕</h1>
-    <p>Everything you need to manage your café from one premium dashboard.</p>
-    <button class="hero-btn" onclick="showPage('sales')">＋ Start New Sale</button>
-  </div>
-
-  <div class="stats">
-
-    <div class="stat">
-      <div class="stat-top">
-        <div class="stat-icon orange">﷼</div>
-        <span style="color:var(--green);font-size:11px">Today</span>
+<!-- TOP HEADER -->
+<div class="top-header">
+  <div class="header-row">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="brand-badge">☕</div>
+      <div>
+        <h4 style="font-size:10px;opacity:0.9;" id="live-date">8/28/2026</h4>
+        <h2 style="font-size:16px;font-weight:800;">Cup And Go</h2>
       </div>
-      <div class="stat-value">SR <span id="dash-sales">0</span></div>
-      <div class="stat-label">Today's Sales</div>
     </div>
-
-    <div class="stat">
-      <div class="stat-top">
-        <div class="stat-icon blue">🧾</div>
-      </div>
-      <div class="stat-value" id="dash-orders">0</div>
-      <div class="stat-label">Today's Orders</div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span id="live-clock" style="font-size:11px;font-weight:700;background:rgba(255,255,255,0.2);padding:5px 8px;border-radius:8px;">2:49:53 AM</span>
+      <button class="btn" style="background:rgba(255,255,255,0.2);color:#fff;padding:6px 8px;font-size:11px;" onclick="document.body.classList.toggle('dark')">🌙</button>
     </div>
-
-    <div class="stat">
-      <div class="stat-top">
-        <div class="stat-icon green">📦</div>
-      </div>
-      <div class="stat-value" id="dash-products">0</div>
-      <div class="stat-label">Products</div>
-    </div>
-
-    <div class="stat">
-      <div class="stat-top">
-        <div class="stat-icon red">💳</div>
-      </div>
-      <div class="stat-value">SR <span id="dash-card">0</span></div>
-      <div class="stat-label">Card Sales Today</div>
-    </div>
-
   </div>
+  <div class="top-stats">
+    <div class="stat-box"><h3 id="stat-cust">0</h3><span>Customers</span></div>
+    <div class="stat-box"><h3 id="stat-active">4</h3><span>Products</span></div>
+    <div class="stat-box"><h3 id="stat-sales">0 SR</h3><span>Total Sales</span></div>
+  </div>
+</div>
 
-  <div class="grid-2">
+<div class="container">
 
+  <!-- HOME PAGE -->
+  <section id="page-home" class="page active">
+    <div class="section-title">Quick actions</div>
+    <div class="quick-grid">
+      <div class="quick-card" onclick="showPage('sales', document.querySelectorAll('.nav-item')[1])">
+        <div class="quick-icon" style="background:#fff0e3;color:var(--orange);">🛒</div>
+        <span style="font-size:10px;font-weight:700;">POS Menu</span>
+      </div>
+      <div class="quick-card" onclick="showPage('orders', document.querySelectorAll('.nav-item')[3])">
+        <div class="quick-icon" style="background:#eef0ff;color:var(--blue);">🧾</div>
+        <span style="font-size:10px;font-weight:700;">Orders</span>
+      </div>
+      <div class="quick-card" onclick="showPage('products', document.querySelectorAll('.nav-item')[4])">
+        <div class="quick-icon" style="background:#e8fbf5;color:var(--green);">📦</div>
+        <span style="font-size:10px;font-weight:700;">Products</span>
+      </div>
+      <div class="quick-card" onclick="showPage('admin', document.querySelectorAll('.nav-item')[5])">
+        <div class="quick-icon" style="background:#ffeded;color:var(--red);">📊</div>
+        <span style="font-size:10px;font-weight:700;">Admin</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SALES / POS PAGE -->
+  <section id="page-sales" class="page">
+    <h3 style="margin-bottom:10px;font-size:15px;font-weight:800;">Select Menu Item</h3>
+    <div class="products-grid" id="pos-products"></div>
+    
+    <div class="card" style="margin-top:15px;">
+      <h4 style="margin-bottom:8px;font-size:13px;">Current Cart</h4>
+      <div id="cart-list" style="max-height:160px;overflow:auto;font-size:12px;margin-bottom:10px;">Cart is empty</div>
+      
+      <div style="display:flex;justify-content:space-between;font-weight:800;font-size:15px;margin-bottom:10px;">
+        <span>Total (VAT incl.):</span><span id="cart-total" style="color:var(--orange);">SR 0.00</span>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <button class="btn btn-primary" style="flex:1;padding:10px;" onclick="completeSale('Cash')">Cash Pay</button>
+        <button class="btn" style="flex:1;background:var(--green);color:#fff;padding:10px;" onclick="completeSale('Card')">Card Pay</button>
+      </div>
+      <button class="btn" style="width:100%;background:var(--red);color:#fff;padding:8px;" onclick="cancelOrder()">Cancel Order</button>
+    </div>
+  </section>
+
+  <!-- ORDERS / TRANSACTIONS PAGE -->
+  <section id="page-orders" class="page">
+    <h3 style="margin-bottom:10px;font-size:15px;font-weight:800;">Customer Transactions</h3>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table>
+        <thead><tr><th>ID</th><th>Time</th><th>Payment</th><th>Total</th><th>Action</th></tr></thead>
+        <tbody id="orders-table"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:15px;">No transactions yet</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PRODUCTS PAGE -->
+  <section id="page-products" class="page">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+      <h3 style="font-size:15px;font-weight:800;">Inventory</h3>
+      <button class="btn btn-primary" style="padding:6px 12px;font-size:11px;" onclick="document.getElementById('p-modal').classList.remove('hidden')">+ Add</button>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden;">
+      <table>
+        <thead><tr><th>Name</th><th>Category</th><th>Price</th></tr></thead>
+        <tbody id="products-table"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ADMIN / 24H & 30 DAYS REPORT PAGE -->
+  <section id="page-admin" class="page">
+    <h3 style="margin-bottom:10px;font-size:15px;font-weight:800;">Admin & Day Close Reports</h3>
+    
     <div class="card">
-      <div class="card-head">
-        <h3>Sales Overview</h3>
-        <span>Last 7 Days</span>
-      </div>
-      <div class="chart" id="sales-chart"></div>
+      <h4 style="font-size:13px;margin-bottom:8px;color:var(--orange);">24 Hours / Today's Summary</h4>
+      <p style="font-size:12px;margin-bottom:5px;">Total Orders: <b id="admin-today-orders">0</b></p>
+      <p style="font-size:12px;margin-bottom:12px;">Total Revenue: <b id="admin-today-rev">SR 0.00</b></p>
+      <button class="btn btn-primary" style="width:100%;margin-bottom:15px;" onclick="generateDayClosePDF()">📥 Download 24H Day Close PDF</button>
     </div>
-
+    
     <div class="card">
-      <div class="card-head">
-        <h3>Quick Actions</h3>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <h4 style="font-size:13px;">30 Days Sales History</h4>
+        <input type="text" id="date-search-input" placeholder="Search Date (e.g. 8/28/2026)" oninput="filterHistoryByDate()" style="padding:6px 10px;font-size:11px;border:1px solid var(--border);border-radius:8px;width:150px;background:var(--card);color:var(--text);">
       </div>
-
-      <div class="quick-grid">
-        <button class="quick" onclick="showPage('sales')">
-          🛒
-          <strong>New Sale</strong>
-          <small>Create POS order</small>
-        </button>
-
-        <button class="quick" onclick="openProductModal()">
-          📦
-          <strong>Add Product</strong>
-          <small>Create menu item</small>
-        </button>
-
-        <button class="quick" onclick="showPage('orders')">
-          🧾
-          <strong>Orders</strong>
-          <small>View recent orders</small>
-        </button>
-
-        <button class="quick" onclick="showPage('reports')">
-          📊
-          <strong>Reports</strong>
-          <small>Business analytics</small>
-        </button>
+      <div style="max-height:220px;overflow:auto;">
+        <table>
+          <thead><tr><th>Date</th><th>Orders</th><th>Revenue</th></tr></thead>
+          <tbody id="admin-30days-table"><tr><td colspan="3" style="text-align:center;color:var(--muted);">No history available</td></tr></tbody>
+        </table>
       </div>
     </div>
+  </section>
 
-  </div>
+</div>
 
-  <div class="card">
-    <div class="card-head">
-      <h3>Recent Orders</h3>
-      <button class="btn btn-light" onclick="showPage('orders')">View All</button>
+<!-- BOTTOM NAVIGATION BAR -->
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="showPage('home', this)"><i>🏠</i>Home</button>
+  <button class="nav-item" onclick="showPage('sales', this)"><i>🛒</i>POS</button>
+  <button class="nav-scan" onclick="showPage('sales', document.querySelectorAll('.nav-item')[1])">☕</button>
+  <button class="nav-item" onclick="showPage('orders', this)"><i>🧾</i>Orders</button>
+  <button class="nav-item" onclick="showPage('products', this)"><i>📦</i>Products</button>
+  <button class="nav-item" onclick="showPage('admin', this)"><i>⚙️</i>Admin</button>
+</nav>
+
+<!-- ADD PRODUCT MODAL -->
+<div id="p-modal" class="modal hidden">
+  <div class="modal-box">
+    <h3 style="margin-bottom:12px;font-size:15px;">Add New Product</h3>
+    <div class="field"><label>Name</label><input type="text" id="inp-name" placeholder="Latte"></div>
+    <div class="field"><label>Category</label><select id="inp-cat"><option>Coffee</option><option>Cold Drink</option><option>Dessert</option></select></div>
+    <div class="field"><label>Price (SR)</label><input type="number" id="inp-price" placeholder="15"></div>
+    <div class="field"><label>Emoji or Image URL</label><input type="text" id="inp-icon" placeholder="☕"></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:12px;">
+      <button class="btn" style="background:#ddd;padding:8px 12px;" onclick="document.getElementById('p-modal').classList.add('hidden')">Cancel</button>
+      <button class="btn btn-primary" style="padding:8px 12px;" onclick="saveProduct()">Save</button>
     </div>
-    <div id="dashboard-orders"></div>
   </div>
+</div>
 
-</section>
+<!-- EXACT INVOICE RECEIPT MODAL (Matching Photo Design) -->
+<div id="order-detail-modal" class="modal hidden">
+  <div class="modal-box" style="max-width:340px;background:#fff;color:#000;font-family:monospace;padding:20px;border-radius:10px;">
+    <div id="receipt-content" style="font-size:12px;line-height:1.4;">
+      <div style="text-align:center;margin-bottom:12px;">
+        <h3 style="font-size:16px;font-weight:bold;margin-bottom:2px;">cup and go</h3>
+        <p style="font-size:10px;">حفرالباطن - حي المحمدية<br>Saudi Arabia<br>0554998306</p>
+        <p style="font-size:11px;font-weight:bold;margin-top:5px;">فاتورة ضريبية مبسطة<br>Simplified Tax Invoice</p>
+      </div>
 
-<!-- SALES -->
-<section id="page-sales" class="page">
+      <div style="border-top:1px dashed #000;border-bottom:1px dashed #000;padding:6px 0;margin-bottom:8px;font-size:11px;">
+        <div style="display:flex;justify-content:between;"><span>Quick Serve</span><span>نوع الخدمة</span></div>
+        <div style="display:flex;justify-content:space-between;"><span>Invoice No: <b id="rcpt-inv">23972</b></span><span>رقم الفاتورة</span></div>
+        <div style="display:flex;justify-content:space-between;"><span>Ticket No: <b id="rcpt-tkt">25633</b></span><span>رقم التذكرة</span></div>
+        <div style="display:flex;justify-content:space-between;"><span>Invoice Date: <span id="rcpt-date">28/08/2026 2:10AM</span></span><span>تاريخ الفاتورة</span></div>
+        <div style="display:flex;justify-content:space-between;"><span>Cashier: Ashiq</span><span>أمين الصندوق</span></div>
+      </div>
 
-  <div class="pos-layout">
+      <table style="width:100%;border-collapse:collapse;margin-bottom:8px;font-size:11px;">
+        <thead>
+          <tr style="border-bottom:1px solid #000;">
+            <th style="text-align:left;padding:2px;">Name <span style="font-size:9px;float:right;">اسم</span></th>
+            <th style="text-align:center;padding:2px;">Pric <span style="font-size:9px;">سعر</span></th>
+            <th style="text-align:center;padding:2px;">Qty <span style="font-size:9px;">الكمية</span></th>
+            <th style="text-align:right;padding:2px;">Amount <span style="font-size:9px;">كمية</span></th>
+          </tr>
+        </thead>
+        <tbody id="rcpt-items-body">
+          <!-- Items injected here -->
+        </tbody>
+      </table>
 
-    <div>
+      <div style="border-top:1px solid #000;padding-top:4px;margin-bottom:6px;font-size:11px;">
+        <div style="display:flex;justify-content:space-between;"><span>Total Taxable Amount <span style="font-size:9px;">إجمالي المبلغ الخاضع للضريبة</span></span></div>
+        <div style="text-align:right;font-weight:bold;" id="rcpt-taxable">5.75</div>
+      </div>
 
-      <div class="toolbar">
-        <div>
-          <h2 style="font-size:21px">Point of Sale</h2>
-          <p style="font-size:11px;color:var(--muted);margin-top:4px">
-            Select products to create a new order
-          </p>
+      <div style="border-top:1px dashed #000;border-bottom:1px dashed #000;padding:6px 0;margin-bottom:8px;font-size:12px;font-weight:bold;">
+        <div style="display:flex;justify-content:space-between;"><span>Total Amount Due <span style="font-size:9px;font-weight:normal;">إجمالي المبلغ المستحق</span></span><span id="rcpt-due">5.75</span></div>
+      </div>
+
+      <div style="font-size:11px;margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;"><span id="rcpt-pay-method">CARD</span><span>PAID</span><span id="rcpt-paid-amt">5.75</span></div>
+        <div style="display:flex;justify-content:space-between;"><span>Balance <span style="font-size:9px;">الباقي</span></span><span>0.00</span></div>
+      </div>
+
+      <div style="text-align:center;margin:10px 0;">
+        <div style="font-family:monospace;font-size:8px;letter-spacing:2px;background:#eee;padding:10px;display:inline-block;">
+          [ QR CODE SIMULATION ]<br>████████████████████<br>██ ▄▄▄▄gis██ █▀▄█▀██<br>██ ██████ ██▄▀▄▀███
         </div>
       </div>
+      <div style="text-align:center;font-size:9px;color:#666;" id="rcpt-print-time">Print Date:8/28/2026 2:10:37 AM</div>
+    </div>
 
-      <div class="card">
+    <div style="display:flex;gap:8px;margin-top:15px;">
+      <button class="btn btn-primary" style="flex:1;padding:8px;font-size:11px;" onclick="downloadReceiptPDF()">📥 Download PDF</button>
+      <button class="btn" style="flex:1;background:#ddd;color:#000;padding:8px;font-size:11px;" onclick="document.getElementById('order-detail-modal').classList.add('hidden')">Close</button>
+    </div>
+  </div>
+</div>
 
-        <div class="categories" id="pos-categories"></div>
+<!-- HIDDEN REPORT FOR DAY CLOSE -->
+<div id="pdf-container" style="position:fixed;top:-9999px;"><div id="pdf-report" style="width:600px;padding:30px;background:#fff;color:#000;font-family:sans-serif;">
+  <h2 style="text-align:center;color:#ff7a00;">Cup And Go</h2>
+  <p style="text-align:center;font-size:12px;margin-bottom:20px;">24 Hours Day Close Sales Report</p>
+  <table style="width:100%;border-collapse:collapse;margin-bottom:15px;"><thead><tr><th style="border:1px solid #ddd;padding:8px;">Item</th><th style="border:1px solid #ddd;padding:8px;">Qty</th><th style="border:1px solid #ddd;padding:8px;">Total</th></tr></thead><tbody id="pdf-items"></tbody></table>
+  <h3 style="text-align:right;" id="pdf-total">Total: SR 0.00</h3>
+</div></div>
 
-        <div style="margin-bottom:15px">
-       
+<script>
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      let intro = document.getElementById('intro-screen');
+      intro.style.opacity = '0';
+      intro.style.visibility = 'hidden';
+    }, 1500);
+  });
+
+  setInterval(() => {
+    let now = new Date();
+    document.getElementById('live-clock').innerText = now.toLocaleTimeString();
+    document.getElementById('live-date').innerText = now.toLocaleDateString();
+  }, 1000);
+
+  function showPage(id, el) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    if(el) {
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      if(el.classList.contains('nav-item')) el.classList.add('active');
+    }
+  }
+
+  let products = [
+    {id:1, name:'Ice V60', cat:'Coffee', price:15, icon:'☕'},
+    {id:2, name:'Matcha Latte', cat:'Cold Drink', price:18, icon:'🍵'},
+    {id:3, name:'Passion Fruit', cat:'Cold Drink', price:16, icon:'🍹'},
+    {id:4, name:'Fudge Brownie', cat:'Dessert', price:12, icon:'🍫'},
+    {id:5, name:'Coffee Day', cat:'Coffee', price:7.75, icon:'☕'}
+  ];
+  let cart = [];
+  let orders = [];
+  let totalSales = 0;
+  let history30Days = [];
+
+  function renderProducts() {
+    let grid = document.getElementById('pos-products');
+    let tbl = document.getElementById('products-table');
+    grid.innerHTML = ''; tbl.innerHTML = '';
+    products.forEach(p => {
+      let iconDisplay = p.icon.includes('http') ? `<img src="${p.icon}" style="width:40px;height:40px;object-fit:cover;border-radius:8px;">` : p.icon;
+      grid.innerHTML += `<div class="product-card" onclick="addToCart(${p.id})">
+        <div class="p-icon">${iconDisplay}</div>
+        <div style="font-weight:700;font-size:12px;color:var(--text);">${p.name}</div>
+        <div class="p-price">SR ${p.price}</div>
+      </div>`;
+      tbl.innerHTML += `<tr><td>${p.name}</td><td>${p.cat}</td><td>SR ${p.price}</td></tr>`;
+    });
+    document.getElementById('stat-active').innerText = products.length;
+  }
+
+  function saveProduct() {
+    let n = document.getElementById('inp-name').value, c = document.getElementById('inp-cat').value, p = document.getElementById('inp-price').value, i = document.getElementById('inp-icon').value || '☕';
+    if(n && p) {
+      products.push({id:Date.now(), name:n, cat:c, price:parseFloat(p), icon:i});
+      document.getElementById('p-modal').classList.add('hidden');
+      renderProducts();
+      showToast("Product Saved!");
+    }
+  }
+
+  function addToCart(id) {
+    let p = products.find(x => x.id === id), ex = cart.find(x => x.id === id);
+    if(ex) ex.qty++; else cart.push({...p, qty:1});
+    updateCartUI();
+  }
+
+  function changeQty(id, amt) {
+    let item = cart.find(x => x.id === id);
+    if(item) {
+      item.qty += amt;
+      if(item.qty <= 0) cart = cart.filter(x => x.id !== id);
+      updateCartUI();
+    }
+  }
+
+  function cancelOrder() {
+    if(cart.length === 0) return alert("Cart is already empty!");
+    if(confirm("Are you sure you want to cancel this order?")) {
+      cart = [];
+      updateCartUI();
+      showToast("Order Cancelled!");
+    }
+  }
+
+  function updateCartUI() {
+    let list = document.getElementById('cart-list'), sub = 0;
+    if(cart.length === 0) { list.innerHTML = '<div style="color:var(--muted);text-align:center;padding:10px;">Cart is empty</div>'; }
+    else {
+      list.innerHTML = '';
+      cart.forEach(c => {
+        let tot = c.price * c.qty; sub += tot;
+        list.innerHTML += `<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;border-bottom:1px dashed var(--border);padding-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <b style="color:var(--text);font-size:13px;">${c.name}</b>
+            <b style="color:var(--orange);font-size:13px;">SR ${tot.toFixed(2)}</b>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <small style="color:var(--muted);">Unit: SR ${c.price}</small>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button class="btn" style="padding:3px 10px;background:var(--border);color:var(--text);font-size:12px;font-weight:bold;border-radius:6px;" onclick="changeQty(${c.id}, -1)">-</button>
+              <span style="font-weight:800;font-size:13px;color:var(--text);min-width:15px;text-align:center;">${c.qty}</span>
+              <button class="btn" style="padding:3px 10px;background:var(--border);color:var(--text);font-size:12px;font-weight:bold;border-radius:6px;" onclick="changeQty(${c.id}, 1)">+</button>
+            </div>
+          </div>
+        </div>`;
+      });
+    }
+    let vat = sub * 0.15, total = sub + vat;
+    document.getElementById('cart-total').innerText = 'SR ' + total.toFixed(2);
+  }
+
+  function completeSale(method) {
+    if(cart.length === 0) return alert("Cart is empty!");
+    let sub = 0; cart.forEach(c => sub += (c.price * c.qty));
+    let total = sub + (sub * 0.15);
+    totalSales += total;
+    
+    let invNo = Math.floor(20000 + Math.random() * 80000);
+    let tktNo = Math.floor(20000 + Math.random() * 80000);
+    let nowStr = new Date().toLocaleString();
+
+    let newOrder = {
+      id: invNo,
+      ticket: tktNo,
+      time: nowStr,
+      method: method,
+      items: JSON.parse(JSON.stringify(cart)),
+      subtotal: sub.toFixed(2),
+      total: total.toFixed(2)
+    };
+    
+    orders.push(newOrder);
+    
+    document.getElementById('stat-sales').innerText = totalSales.toFixed(0) + ' SR';
+    document.getElementById('stat-cust').innerText = orders.length;
+    document.getElementById('admin-today-orders').innerText = orders.length;
+    document.getElementById('admin-today-rev').innerText = 'SR ' + totalSales.toFixed(2);
+
+    renderOrdersTable();
+    update30DaysHistory();
+    cart = []; updateCartUI(); 
+    showToast("Payment Successful!");
+
+    viewOrder(newOrder.id);
+  }
+
+  function renderOrdersTable() {
+    let tb = document.getElementById('orders-table');
+    if(orders.length === 0) {
+      tb.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:15px;">No transactions yet</td></tr>`;
+      return;
+    }
+    tb.innerHTML = '';
+    [...orders].reverse().forEach(o => {
+      tb.innerHTML += `<tr style="cursor:pointer;">
+        <td onclick="viewOrder(${o.id})">#${o.id}</td>
+        <td onclick="viewOrder(${o.id})">${o.time}</td>
+        <td onclick="viewOrder(${o.id})">${o.method}</td>
+        <td onclick="viewOrder(${o.id})"><b>SR ${o.total}</b></td>
+        <td><button class="btn btn-primary" style="padding:4px 8px;font-size:10px;" onclick="viewOrder(${o.id})">Receipt</button></td>
+      </tr>`;
+    });
+  }
+
+  function viewOrder(id) {
+    let o = orders.find(x => x.id === id);
+    if(!o) return;
+    
+    document.getElementById('rcpt-inv').innerText = o.id;
+    document.getElementById('rcpt-tkt').innerText = o.ticket;
+    document.getElementById('rcpt-date').innerText = o.time;
+    document.getElementById('rcpt-taxable').innerText = o.subtotal;
+    document.getElementById('rcpt-due').innerText = o.total;
+    document.getElementById('rcpt-pay-method').innerText = o.method.toUpperCase();
+    document.getElementById('rcpt-paid-amt').innerText = o.total;
+    document.getElementById('rcpt-print-time').innerText = "Print Date: " + o.time;
+
+    let tb = document.getElementById('rcpt-items-body');
+    tb.innerHTML = '';
+    o.items.forEach(i => {
+      tb.innerHTML += `<tr>
+        <td style="padding:2px;">${i.name}</td>
+        <td style="text-align:center;padding:2px;">${i.price.toFixed(2)}</td>
+        <td style="text-align:center;padding:2px;">${i.qty.toFixed(2)}</td>
+        <td style="text-align:right;padding:2px;">${(i.price*i.qty).toFixed(2)}</td>
+      </tr>`;
+    });
+
+    document.getElementById('order-detail-modal').classList.remove('hidden');
+  }
+
+  function downloadReceiptPDF() {
+    let element = document.getElementById('receipt-content');
+    let opt = {
+      margin: 0.2,
+      filename: 'Tax_Invoice_' + document.getElementById('rcpt-inv').innerText + '.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: 'in', format: [3.15, 6], orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save().then(() => {
+      showToast("Receipt Downloaded!");
+    });
+  }
+
+  function update30DaysHistory() {
+    let todayStr = new Date().toLocaleDateString();
+    let existingToday = history30Days.find(x => x.date === todayStr);
+    if(existingToday) {
+      existingToday.orders = orders.length;
+      existingToday.rev = totalSales;
+    } else {
+      if(history30Days.length === 0) {
+        for(let i=1; i<=29; i++) {
+          let d = new Date(); d.setDate(d.getDate() - i);
+          history30Days.push({date: d.toLocaleDateString(), orders: Math.floor(5 + Math.random()*15), rev: Math.floor(200 + Math.random()*800)});
+        }
+      }
+      history30Days.unshift({date: todayStr, orders: orders.length, rev: totalSales});
+    }
+
+    renderTableRows(history30Days);
+  }
+
+  function renderTableRows(data) {
+    let tb = document.getElementById('admin-30days-table');
+    tb.innerHTML = '';
+    if(data.length === 0) {
+      tb.innerHTML = `<tr><td colspan="3" style="text-align:center;color:var(--muted);">No matching date found</td></tr>`;
+      return;
+    }
+    data.forEach(h => {
+      tb.innerHTML += `<tr><td>${h.date}</td><td>${h.orders} orders</td><td><b>SR ${h.rev.toFixed(2)}</b></td></tr>`;
+    });
+  }
+
+  function filterHistoryByDate() {
+    let query = document.getElementById('date-search-input').value.toLowerCase();
+    let filtered = history30Days.filter(h => h.date.toLowerCase().includes(query));
+    renderTableRows(filtered);
+  }
+
+  function showToast(msg) {
+    let t = document.getElementById('toast-msg');
+    t.innerText = msg;
+    t.classList.add('show');
+    setTimeout(() => { t.classList.remove('show'); }, 2000);
+  }
+
+  function generateDayClosePDF() {
+    if(orders.length === 0) return alert("No sales today!");
+    let sum = 0, tb = document.getElementById('pdf-items'); tb.innerHTML = '';
+    orders.forEach(o => {
+      o.items.forEach(i => {
+        sum += (i.price * i.qty);
+        tb.innerHTML += `<tr><td style="border:1px solid #ddd;padding:6px;">${i.name}</td><td style="border:1px solid #ddd;padding:6px;">${i.qty}</td><td style="border:1px solid #ddd;padding:6px;">SR ${i.price*i.qty}</td></tr>`;
+      });
+    });
+    document.getElementById('pdf-total').innerText = "Total: SR "+sum.toFixed(2);
+    html2pdf().from(document.getElementById('pdf-report')).save('DayClose.pdf');
+  }
+
+  window.onload = () => { renderProducts(); update30DaysHistory(); };
+</script>
+</body>
+</html>
